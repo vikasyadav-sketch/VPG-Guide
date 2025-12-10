@@ -1,0 +1,1112 @@
+
+<style>
+:root {
+		--text: #000;
+		--muted: #555;
+		--border: #111;
+		--card: #f6f7f9;
+		--badge: #ff8a00;
+		--link: #0a56c2;
+		/* easy knobs */
+		--backTopBottom: 64px;
+		/* back-to-top vertical offset */
+		--catFloatTop: calc(env(safe-area-inset-top, 0px) + 100px);
+		/* floating category bar offset */
+	}
+	
+	html {
+		scroll-behavior: auto;
+	}
+	
+	body {
+		margin: 0;
+		font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+		color: var(--text);
+		background: #fff;
+		line-height: 1.6;
+	}
+	
+	h1,
+	h2 {
+		font-size: 32px;
+		color: #000;
+		line-height: 1.25;
+		margin: 0 0 14px;
+		letter-spacing: .2px;
+	}
+	
+	p,
+	li {
+		font-size: 18px;
+	}
+	
+	.lead {
+		color: #000;
+	}
+	
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 20px 16px 60px;
+	}
+	
+	.top-wrap {
+		display: grid;
+		grid-template-columns: 1.05fr 1fr;
+		gap: 28px;
+		align-items: start;
+	}
+	/* ========================= GALLERY (BASE) ========================= */
+	
+	.gallery {
+		position: relative;
+	}
+	
+	.gallery-main {
+		width: 100%;
+		aspect-ratio: 16/9;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+		background: #fff;
+		position: relative;
+		/* for arrows */
+		touch-action: pan-y;
+	}
+	
+	.gallery-main img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		user-select: none;
+		-webkit-user-drag: none;
+		pointer-events: none;
+		/* allow swipe over image */
+	}
+	/* Thumbnails */
+	
+	.thumbs {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+		margin-top: 12px;
+	}
+	
+	.thumb {
+		border: 1px solid #ccc;
+		border-radius: 10px;
+		overflow: hidden;
+		background: #fff;
+		cursor: pointer;
+		transition: transform .12s, box-shadow .12s, border-color .12s;
+	}
+	
+	.thumb:focus,
+	.thumb:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+		border-color: #888;
+	}
+	
+	.thumb img {
+		width: 100%;
+		height: 100%;
+		aspect-ratio: 4/3;
+		object-fit: cover;
+		display: block;
+	}
+	/* Intro card */
+	
+	.intro {
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 14px;
+		padding: 18px 18px 8px;
+	}
+	
+	.intro h1 {
+		margin-bottom: 10px;
+	}
+	
+	.divider {
+		height: 1px;
+		background: #000;
+		border: 0;
+		margin: 30px 0;
+	}
+
+	/* ========================= SPECS (BASE) ========================= */
+	
+	.specs {
+		background: #f6f7f9;
+		border: 1px solid #e1e4e8;
+		border-radius: 14px;
+		padding: 18px;
+	}
+	
+	.spec-block {
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 12px;
+		padding: 0;
+		/* head/body separation */
+		margin-bottom: 20px;
+		overflow: hidden;
+	}
+	
+	.spec-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		/* arrow to right edge */
+		gap: 12px;
+		padding: 14px 16px;
+		cursor: pointer;
+		background: #fff;
+	}
+	
+	.spec-head h3 {
+		font-size: 18px;
+		margin: 0;
+		color: #000;
+		font-weight: 700;
+	}
+	
+	.spec-toggle {
+		appearance: none;
+		border: 0;
+		background: transparent;
+		width: 36px;
+		height: 36px;
+		border-radius: 8px;
+		display: grid;
+		place-items: center;
+	}
+	
+	.spec-toggle:focus {
+		outline: 2px solid #000;
+		outline-offset: 2px;
+	}
+	
+	.chev {
+		display: inline-block;
+		transition: transform .2s ease;
+		font-size: 18px;
+		line-height: 1;
+	}
+	
+	.spec-body {
+		padding: 0 16px 14px;
+	}
+	
+	.spec-dl {
+		display: grid;
+		grid-template-columns: minmax(180px, 260px) 1fr;
+		column-gap: 24px;
+		row-gap: 12px;
+		margin: 0;
+	}
+	/* ========================= TABS / CATEGORY BAR (BASE) ========================= */
+	
+	.tabbar-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 14px;
+	}
+	
+	.tabbar {
+		flex: 1 1 auto;
+		display: flex;
+		gap: 6px;
+		background: #f1f5f9;
+		border: 1px solid #e5e7eb;
+		border-radius: 10px;
+		padding: 6px;
+	}
+	
+	.tabbar [role="tab"] {
+		position: relative;
+		appearance: none;
+		background: #fff;
+		border: 1px solid #e5e7eb;
+		border-radius: 8px;
+		padding: 10px 14px;
+		font-size: 16px;
+		cursor: pointer;
+		color: #000;
+		white-space: nowrap;
+	}
+	
+	.tabbar [role="tab"][aria-selected="true"] {
+		border-color: #cbd5e1;
+	}
+	
+	.tabbar [role="tab"][aria-selected="true"]::after {
+		content: "";
+		position: absolute;
+		left: 10px;
+		right: 10px;
+		bottom: -7px;
+		height: 3px;
+		background: #1e73ff;
+		border-radius: 3px;
+	}
+	
+	.tabbar [role="tab"]:focus {
+		outline: 2px solid #000;
+		outline-offset: 2px;
+	}
+	
+	.tab-next {
+		flex: 0 0 auto;
+		width: 36px;
+		height: 36px;
+		border-radius: 999px;
+		border: 1px solid #e5e7eb;
+		background: #fff;
+		cursor: pointer;
+		line-height: 36px;
+		text-align: center;
+		font-size: 18px;
+	}
+	
+	.tab-next:focus {
+		outline: 2px solid #000;
+		outline-offset: 2px;
+	}
+	
+	.tabs {
+		margin-top: 26px;
+	}
+	
+	.tab-panel {
+		display: none;
+		padding-top: 18px;
+	}
+	
+	.tab-panel[aria-hidden="false"] {
+		display: block;
+	}
+	/* Issue card (unchanged base) */
+	
+	.issue {
+		display: grid;
+		grid-template-columns: 300px 1fr;
+		gap: 18px;
+		align-items: start;
+		border: 1px solid #e6e6e6;
+		border-radius: 14px;
+		padding: 16px;
+		background: #fff;
+		margin-bottom: 0;
+	}
+	
+	.issue-media figure {
+		margin: 0;
+		border: 1px solid #e6e6e6;
+		border-radius: 12px;
+		overflow: hidden;
+		background: #fff;
+	}
+	
+	.issue-media img {
+		width: 100%;
+		height: auto;
+		display: block;
+		object-fit: cover;
+	}
+	
+	.issue-media figcaption {
+		font-size: 14px;
+		padding: 8px 10px;
+		background: #fafafa;
+		border-top: 1px solid #eee;
+	}
+	
+	.issue h3 {
+		font-size: 18px;
+		margin: 0 0 8px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	
+	.issue h4 {
+		font-size: 18px;
+		margin: 0 0 8px;
+	}
+	
+	.badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 14px;
+		font-weight: 700;
+		background: var(--badge);
+		color: #000;
+		border-radius: 999px;
+		padding: 4px 10px;
+		white-space: nowrap;
+	}
+	
+	.issue-block {
+		margin: 12px 0;
+	}
+	
+	.issue-block h4 {
+		font-size: 18px;
+		margin: 0 0 6px;
+		color: #000;
+		font-weight: 700;
+	}
+    
+    .issue-content > :last-child {
+        margin-bottom: 0;
+    }
+	
+	.parts-list,
+	.symptom-list,
+	.brand-list {
+		margin: 0;
+		padding-left: 18px;
+	}
+	
+	.parts-list li,
+	.symptom-list li {
+		margin: 6px 0;
+	}
+	
+	.brand-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 12px;
+		list-style: none;
+		padding-left: 0;
+	}
+	
+	.brand-list li {
+		font-size: 16px;
+		border: 1px solid #e2e2e2;
+		padding: 6px 10px;
+		border-radius: 999px;
+		background: #fafafa;
+	}
+	/* Links */
+	
+	a {
+		color: var(--link);
+		text-decoration: none;
+	}
+	
+	a:hover {
+		text-decoration: underline;
+	}
+	/* Helpers */
+	
+	.parts-list li {
+		overflow-wrap: anywhere;
+	}
+	
+	.spec-dl dt {
+		font-weight: 700;
+	}
+	/* ========================= NEW: GALLERY ARROWS (MOBILE + DESKTOP) ========================= */
+	
+	.gallery-arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		border: 0;
+		background: rgba(0, 0, 0, 0.55);
+		color: #fff;
+		display: grid;
+		place-items: center;
+		cursor: pointer;
+		z-index: 2;
+	}
+	
+	.gallery-arrow:focus {
+		outline: 2px solid #fff;
+		outline-offset: 2px;
+	}
+	
+	.gallery-arrow.left {
+		left: 10px;
+	}
+	
+	.gallery-arrow.right {
+		right: 10px;
+	}
+	/* ========================= NEW: FLOATING CATEGORY BAR (MOBILE ONLY) ========================= */
+	/* polished design per best practices */
+	
+	@media (max-width: 900px) {
+		.tabbar {
+			overflow-x: auto;
+			overflow-y: hidden;
+			white-space: nowrap;
+			scrollbar-width: thin;
+		}
+		.tabbar::-webkit-scrollbar {
+			height: 8px;
+		}
+		.tabbar::-webkit-scrollbar-thumb {
+			background: #cbd5e1;
+			border-radius: 8px;
+		}
+		.tabbar-wrap.floating-on-mobile {
+			position: sticky;
+			top: var(--catFloatTop);
+			/* <= adjust with CSS var */
+			z-index: 1000;
+			padding: 6px 0;
+			/* space for edge fades */
+			background: transparent;
+		}
+		/* Card look behind the tabs */
+		.tabbar-wrap.floating-on-mobile .tabbar {
+			background: rgba(255, 255, 255, 0.85);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid #e5e7eb;
+			border-radius: 14px;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+			padding: 8px;
+			overflow-x: auto;
+			overflow-y: hidden;
+			white-space: nowrap;
+			scrollbar-width: none;
+		}
+		.tabbar-wrap.floating-on-mobile .tabbar::-webkit-scrollbar {
+			display: none;
+		}
+		/* Pills */
+		.tabbar-wrap.floating-on-mobile .tabbar [role="tab"] {
+			border-radius: 999px;
+			border: 1px solid #e5e7eb;
+			background: #fff;
+			padding: 20px 25px;
+			font-size: 15px;
+			line-height: 1;
+		}
+		.tabbar-wrap.floating-on-mobile .tabbar [role="tab"][aria-selected="true"] {
+			border-color: #cbd5e1;
+			box-shadow: inset 0 0 0 1px #cbd5e1;
+		}
+		.tabbar-wrap.floating-on-mobile .tabbar [role="tab"][aria-selected="true"]::after {
+			display: none;
+		}
+		/* Edge fade hints */
+		.tabbar-wrap.floating-on-mobile::before,
+		.tabbar-wrap.floating-on-mobile::after {
+			content: "";
+			position: absolute;
+			top: 6px;
+			bottom: 6px;
+			width: 28px;
+			pointer-events: none;
+			z-index: 1;
+		}
+		.tabbar-wrap.floating-on-mobile::before {
+			left: 0;
+			background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+		}
+		.tabbar-wrap.floating-on-mobile::after {
+			right: 0;
+			background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+		}
+		.tabbar-wrap.floating-on-mobile.no-left-fade::before {
+			opacity: 0;
+		}
+		.tabbar-wrap.floating-on-mobile.no-right-fade::after {
+			opacity: 0;
+		}
+		/* Out-of-range revert */
+		.tabbar-wrap.floating-on-mobile.out-of-range {
+			position: static;
+			box-shadow: none;
+		}
+		/* Optional smaller "next" on mobile */
+		.tab-next {
+			width: 34px;
+			height: 34px;
+			font-size: 18px;
+			border-radius: 50%;
+			border: 1px solid #e5e7eb;
+			background: #fff;
+		}
+	}
+	/* ========================= NEW: SPECS ACCORDION (MOBILE ONLY) ========================= */
+	
+	@media (max-width: 900px) {
+		.spec-block .spec-body {
+			display: none;
+		}
+		.spec-block.acc-open .spec-body {
+			display: block;
+		}
+		.spec-block .chev {
+			transform: rotate(0deg);
+		}
+		.spec-block.acc-open .chev {
+			transform: rotate(180deg);
+		}
+	}
+	
+	@media (min-width: 901px) {
+		.spec-toggle {
+			display: none;
+		}
+		.spec-head {
+			cursor: default;
+		}
+		.spec-block .spec-body {
+			display: block !important;
+		}
+	}
+	/* ========================= NEW: BACK TO TOP (MOBILE LEFT-BOTTOM) ========================= */
+	
+	#backToTop {
+		position: fixed;
+		left: 16px;
+		bottom: var(--backTopBottom);
+		z-index: 1100;
+		width: 48px;
+		height: 48px;
+		border-radius: 999px;
+		border: 0;
+		background: #111;
+		color: #fff;
+		font-size: 20px;
+		line-height: 1;
+		display: none;
+		/* shown by JS on scroll */
+		box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+	}
+	
+	#backToTop.show {
+		display: grid;
+		place-items: center;
+	}
+	
+	@media (min-width: 901px) {
+		#backToTop {
+			display: none !important;
+		}
+	}
+	/* ===================== Responsive (kept from baseline) ===================== */
+	
+	@media (max-width:1100px) {
+		.top-wrap {
+			grid-template-columns: 1fr;
+		}
+	}
+	
+	@media (max-width:900px) {
+		.issue {
+			grid-template-columns: 1fr;
+		}
+		.thumbs {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	
+	@media (max-width:700px) {
+		.gallery-main {
+			aspect-ratio: 4/3;
+		}
+		.thumbs {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.container {
+			padding: 16px 12px 48px;
+		}
+		.tabbar [role="tab"] {
+			padding: 10px 12px;
+			font-size: 15px;
+		}
+		.spec-dl {
+			grid-template-columns: 1fr;
+			row-gap: 10px;
+		}
+	}
+	
+	@media (max-width:480px) {
+		.thumbs {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+		}
+		.issue {
+			padding: 14px;
+		}
+		.issue-media figcaption {
+			font-size: 13px;
+		}
+		.brand-list li {
+			font-size: 15px;
+		}
+		.tab-next {
+			width: 32px;
+			height: 32px;
+			line-height: 32px;
+		}
+	}
+	
+	.sr-only {
+		position: absolute !important;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+	/* ===== Hide thumbnails on mobile completely (no pile under gallery) ===== */
+	
+	@media (max-width: 900px) {
+		#thumbs {
+			display: none !important;
+		}
+	}
+	/* ======================= PATCH: Floating Category Dropdown (mobile) ======================= */
+	/* PATCH START: CSS for floating dropdown + remove stray arrow */
+	
+	#tabbarWrap .cat-dropdown {
+		display: none;
+		margin: 8px 0;
+	}
+	
+	#tabbarWrap .cat-dropdown select {
+		width: 100%;
+		padding: 12px 16px;
+		border: 2px solid #001b6e;
+		border-radius: 15px;
+		background: #001b6e;
+		font-size: 18px;
+		color: #ffffff;
+		box-shadow: 0 6px 10px rgba(0, 0, 0, 0.20);
+		transition: box-shadow 0.3s ease;
+	}
+	
+	#tabbarWrap .cat-dropdown select:hover,
+	#tabbarWrap .cat-dropdown select:focus {
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.30);
+	}
+@media (max-width:900px) {
+	#tabbarWrap {
+		position: sticky;
+		top: var(--catFloatTop, 60px);
+		z-index: 1000;
+		padding: 6px 0;
+		box-shadow: 0 0px 0px rgba(0, 0, 0, .06);
+	}
+	
+	#tabbarWrap .tabbar {
+		display: none;
+	}
+	/* hide desktop pills on mobile */
+	
+	#tabbarWrap .cat-dropdown {
+		display: block;
+	}
+	/* show dropdown on mobile */
+}
+.tab-next {
+	display: none !important;
+}
+
+/* kill stray arrow globally */
+
+/* PATCH END */
+
+/* ========================= WHY EEUROPARTS SECTION ========================= */
+.why-eeuroparts {
+	margin: 40px 0;
+	padding: 0 16px;
+}
+
+.why-eeuroparts h4 {
+	font-size: 20px;
+	margin: 24px 0 12px;
+	color: #000;
+	font-weight: 600;
+}
+
+.why-eeuroparts p {
+	margin: 0 0 16px;
+	line-height: 1.6;
+}
+
+/* ========================= FAQ SECTION ========================= */
+#faq {
+	margin: 40px 0;
+	background: var(--card, #f8f9fb);
+	border: 1px solid var(--border, #e1e4e8);
+	border-radius: 14px;
+	padding: 18px;
+}
+
+#faq h2 {
+	font-size: 24px;
+	margin: 0 0 12px;
+	color: var(--text-strong, #000);
+}
+
+#faq .faq-list {
+	display: grid;
+	gap: 10px;
+}
+
+#faq .faq-item {
+	background: #fff;
+	border: 1px solid #e6e6e6;
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+#faq .faq-q {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	cursor: pointer;
+	padding: 14px 16px;
+	font-weight: 700;
+	color: var(--text-strong, #000);
+	list-style: none;
+}
+
+#faq .faq-q::-webkit-details-marker {
+	display: none;
+}
+
+#faq .faq-a {
+	padding: 0 16px 14px;
+	color: var(--text, #222);
+	font-size: 16px;
+}
+
+#faq .chev {
+	display: inline-block;
+	transition: transform .2s ease;
+	font-size: 18px;
+	line-height: 1;
+}
+
+#faq .faq-item[open] .chev {
+	transform: rotate(180deg);
+}
+
+/* ========================= CUSTOMER REVIEWS ========================= */
+.reviews {
+	margin: 40px 0;
+	background: #f6f7f9;
+	border: 1px solid #e1e4e8;
+	border-radius: 14px;
+	padding: 18px;
+}
+
+.reviews h2 {
+	font-size: 22px;
+	margin: 0 0 16px;
+	color: #000;
+}
+
+.review-card {
+	background: #fff;
+	border: 1px solid #e6e6e6;
+	border-radius: 10px;
+	padding: 14px 16px;
+	margin-bottom: 12px;
+}
+
+.review-card:last-child {
+	margin-bottom: 0;
+}
+
+.review-card .stars {
+	color: #f5a623;
+	font-size: 18px;
+	margin-bottom: 6px;
+}
+
+.review-card p {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+/* ========================= CLOSING CTA ========================= */
+.closing-cta {
+	text-align: center;
+	margin: 40px 0 20px;
+	padding: 0 16px;
+}
+
+.closing-cta h3 {
+	font-size: 20px;
+	color: #000;
+	font-weight: 600;
+}
+
+/* ========================= RESPONSIVE ADJUSTMENTS ========================= */
+@media (max-width: 700px) {
+	#faq {
+		padding: 16px;
+	}
+	#faq .faq-q {
+		padding: 12px 14px;
+		font-size: 16px;
+	}
+	#faq .faq-a {
+		padding: 0 14px 12px;
+	}
+	.why-eeuroparts h4 {
+		font-size: 18px;
+	}
+}
+
+</style>
+
+<p><br></p>
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "Thing", "name": "{{ vehicle_heading }}", "brand": "Mercedes-Benz", "model": "Sprinter", "vehicleEngine": { "@type": "EngineSpecification", "name": "3.0L V6 Turbo-Diesel", "engineType": "Turbo-Diesel", "fuelType": "Diesel", "torque": "376 lb-ft", "horsePower": "224 hp" }, "vehicleSeatingCapacity": 15, "bodyType": "Van", "driveWheelConfiguration": "RWD", "vehicleTransmission": "5-Speed Automatic" }
+</script>
+<main class="container" itemscope="" itemtype="https://schema.org/Article">
+	<!-- Top: Album (left) + Content (right) -->
+	<section class="top-wrap">
+		<!-- ========= TOP IMAGE GALLERY (with swipe + arrows) ========= -->
+		<!-- [SECTION: GALLERY START] -->
+		<div aria-label="Vehicle image gallery" class="gallery" id="gallery">
+			<div class="gallery-main" id="galleryMain">
+				<!-- ARROWS overlay on image -->
+				<button aria-label="Previous image" class="gallery-arrow left" id="galPrev" type="button">&lsaquo;</button>
+				<button aria-label="Next image" class="gallery-arrow right" id="galNext" type="button">&rsaquo;</button><img id="mainImage" src="{{ car_images.front if car_images.front else 'https://eeuroparts.com/var/theme/images/Mercedes-Benz-Sprinter-W906-3.0L-V6-Turbo-Diesel.jpeg' }}" alt="{{ vehicle_heading }} front view" loading="eager" class="fr-fil fr-dib"></div>
+			<div class="thumbs" id="thumbs" role="list">
+				{% if car_images.quarter %}<button aria-label="Show quarter view" class="thumb" data-src="{{ car_images.quarter }}" role="listitem"><img src="{{ car_images.quarter }}" alt="Quarter view thumbnail" loading="lazy" class="fr-fil fr-dib"></button>{% endif %}
+				{% if car_images.side %}<button aria-label="Show side view" class="thumb" data-src="{{ car_images.side }}" role="listitem"><img src="{{ car_images.side }}" alt="Side view thumbnail" loading="lazy" class="fr-fil fr-dib"></button>{% endif %}
+				{% if car_images.rear %}<button aria-label="Show rear view" class="thumb" data-src="{{ car_images.rear }}" role="listitem"><img src="{{ car_images.rear }}" alt="Rear view thumbnail" loading="lazy" class="fr-fil fr-dib"></button>{% endif %}
+				
+			</div>
+		</div>
+		<!-- [SECTION: GALLERY END] -->
+		<!-- Content -->
+		<article class="intro" itemprop="articleBody">
+
+			<h1 itemprop="headline">{{ vehicle_heading }} Platform Guide</h1>
+
+			<p>In this Vehicle Platform Guide, you will find the top common issues of {{ vehicle_heading }}, along with their fault codes, and the solutions from eEuroparts.com.
+				<br><br>{{ description_text }}<span style="color: rgb(0, 0, 0);"><br></span></p>
+		</article>
+	</section>
+	<hr class="divider" aria-hidden="true">
+	<!-- ========= SPECIFICATIONS (Accordion on mobile) ========= -->
+	<!-- [SECTION: SPECIFICATIONS START] -->
+	<section aria-labelledby="specs-heading" class="specs" id="specifications">
+
+		<h2 id="specs-heading">Specifications&nbsp;</h2>
+		<!-- Block 1 -->
+		{% for spec_title, spec_data in specs.items() %}
+		<div class="spec-block" data-acc="">
+			<div aria-expanded="false" class="spec-head" role="button" tabindex="0">
+
+				<h3>{{ spec_title }}</h3>
+				<button aria-hidden="true" class="spec-toggle" tabindex="-1" type="button"><span class="chev">⌄</span></button>
+			</div>
+			<div class="spec-body">
+
+				<dl class="spec-dl">
+					{% for key, value in spec_data.items() %}
+					<dt>{{ key }}:</dt>
+					<dd>{{ value }}</dd>
+					{% endfor %}
+				</dl>
+			</div>
+		</div>
+		{% endfor %}
+	</section>
+	<!-- [SECTION: SPECIFICATIONS END] -->
+	
+	<!-- ========= CATEGORY TABS / ISSUES ========= -->
+	<!-- [SECTION: ISSUES (CATEGORY BAR + PANELS) START] -->
+	<section aria-labelledby="issues-heading" class="tabs" id="issues">
+
+		<h2 id="issues-heading">Top Common Issues with {{ vehicle_heading }}</h2>
+		<div class="tabbar-wrap" id="tabbarWrap">
+			<div aria-label="Issue categories" class="tabbar" role="tablist">
+				{% for category in issues.keys() %}
+				<button aria-controls="panel-{{ category.lower().replace(' ', '-').replace('/', '-') }}" {% if loop.first %}aria-selected="true"{% else %}aria-selected="false"{% endif %} id="tab-{{ category.lower().replace(' ', '-').replace('/', '-') }}-btn" role="tab">{{ category }}</button>
+				{% endfor %}
+			</div>
+			<button aria-label="Next category" class="tab-next" title="Next" type="button">➜</button>
+			<!-- PATCH START: Mobile dropdown (auto-populated by JS; shown only on mobile) -->
+			<div aria-label="Choose category" class="cat-dropdown">
+				<label class="sr-only" for="catSelect">Choose category</label>
+				<select id="categorySelect">&nbsp;
+					<!-- Fallback options are fine; JS will rebuild -->
+					{% for category in issues.keys() %}
+					<option value="panel-{{ category.lower().replace(' ', '-').replace('/', '-') }}">{{ category }}</option>
+					{% endfor %} &nbsp;</select>
+			</div>
+			<!-- PATCH END -->
+		</div>
+		<!-- ======================== PASTE YOUR 23-ISSUES HTML BELOW ======================== -->
+		<!-- Panels -->
+		{% for category, issue_list in issues.items() %}
+		<div aria-hidden="{% if loop.first %}false{% else %}true{% endif %}" aria-labelledby="tab-{{ category.lower().replace(' ', '-').replace('/', '-') }}-btn" class="tab-panel" id="panel-{{ category.lower().replace(' ', '-').replace('/', '-') }}" role="tabpanel">
+			{% for issue in issue_list %}
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="{% if issue.parts and issue.parts[0].image %}{{ issue.parts[0].image }}{% else %}/images/content/placeholder.jpg{% endif %}" alt="{{ issue.title|replace(' Failure', '')|replace(' failure', '') }}" loading="lazy" class="fr-fil fr-dib" data-width="600" data-url="{% if issue.parts and issue.parts[0].image %}{{ issue.parts[0].image }}{% else %}/images/content/placeholder.jpg{% endif %}" data-message="File was successfully uploaded" data-size="8800" data-height="400" data-id="995">
+						<figcaption>{{ issue.title|replace(' Failure', '')|replace(' failure', '') }}</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>{{ loop.index }}.&nbsp;</strong>{{ issue.title }}</h4>
+					{% if issue.fault_codes %}
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>{{ issue.fault_codes }}</p>
+					</div>
+					{% endif %}
+					{% if issue.why %}
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>{{ issue.why }}</p>
+					</div>
+					{% endif %}
+					{% if issue.symptoms %}
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							{% for symptom in issue.symptoms %}
+							<li>{{ symptom }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+					{% if issue.parts %}
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							{% for part in issue.parts %}
+							<li><a href="{{ part.link }}">{{ part.name }}</a>{{ part.description }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+					{% if issue.brands %}
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							{% for brand in issue.brands %}
+							<li><a href="{{ brand.link }}">{{ brand.name }}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+					{% endif %}
+				</div>
+			</article>
+			{% endfor %}
+		</div>
+		{% endfor %}
+		<!-- ======================== PASTE YOUR 23-ISSUES HTML ABOVE ======================== -->
+	</section>
+
+	<!-- ======================== WHY EEUROPARTS SECTION ======================== -->
+	
+		<h4>Why eEuroparts.com?</h4>
+		<p>eEuroparts offers a wide selection of OEM and well-reviewed aftermarket parts chosen for compatibility with Mercedes-Benz vehicles. Parts are listed with fitment details and trusted brand options to help you find components that are appropriate for routine maintenance and common repairs.</p>
+
+		<h4>Exceptional Delivery, Unmatched Logistics</h4>
+		<p>We know that every moment counts when your car is out of commission. That&rsquo;s why we focus on getting your parts to you as quickly as possible. Our efficient logistics network and fast shipping mean minimal downtime for your vehicle.</p>
+
+		<h4>Competitive Prices, Superior Value</h4>
+		<p>Our catalog includes everything from timing chains, camshaft adjusters, and PCV valves to wheel bearings, control arms, and fuel pumps, sourced to meet or exceed OE standards. Whether you prefer genuine Mercedes-Benz parts or trusted aftermarket brands, we offer top-tier quality at better-than-dealer pricing.</p>
+
+		<h4>Trusted Excellence</h4>
+		<p>Our catalog includes parts from top-tier brands like Bosch, INA, ZF, Pierburg, Elring, Lemforder, and Rein. Whether you&#39;re resolving transmission issues, electrical faults, or suspension wear, our parts meet or exceed OEM standards for fit, durability, and performance.</p>
+
+		<h4>Conclusion</h4>
+		<p>Whether you&rsquo;re replacing worn items or addressing a specific fault, use these listings to identify likely parts and plan repairs. For vehicle-specific advice, consult a trusted technician to confirm fitment and service steps before installation.</p>
+
+
+	<!-- ======================== FAQ SECTION ======================== -->
+	<section aria-labelledby="faq-heading" class="faq" id="faq">
+		<h2 id="faq-heading">Frequently Asked Questions</h2>
+		<div class="faq-list" role="list">
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">What common issues do GL550 and GLS550 owners experience?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">Most owners report air suspension sagging, oil leaks from valve covers or turbo lines, and premature wear in control arms. These issues become more noticeable as mileage increases.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">Why does my GL550 or GLS550 sit low or lean on one side?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">This is usually caused by failing air suspension components like air struts, air springs, or the compressor. The SUV may drop overnight or show a suspension warning.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">Is maintenance on the GL550/GLS550 expensive?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">Maintenance costs can be higher due to the V8 twin-turbo engine and advanced suspension system. Regular service and using reliable OEM or premium aftermarket parts help keep costs manageable.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">Why does my GL550/GLS550 show a loss of power during acceleration?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">Loss of power often points to worn spark plugs, boost leaks, dirty sensors, or early turbo wear. A simple inspection of coils, hoses, and sensors usually identifies the cause.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">What causes a burning oil smell in the GL550 or GLS550?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">These models commonly develop valve cover gasket leaks or oil leaks around turbo oil lines. Heat from the engine makes the smell stronger, especially after longer drives.</div>
+			</details>
+		</div>
+	</section>
+	<!-- ======================== CUSTOMER REVIEWS ======================== -->
+	<section class="reviews" id="customer-reviews">
+		<h2>What Customers Say on Trustpilot</h2>
+		<div class="review-card">
+			<div class="stars">★★★★★</div>
+			<p><strong>I have experience with eEuroparts&hellip;</strong><br>
+			&quot;I have experience with eEuroparts longtime and they good parts of Mercedes and all fits my car. They have excellent quality parts.&rdquo; - <a href="https://www.trustpilot.com/reviews/68568ca57457a6a2117eff7b" rel="noopener noreferrer" target="_blank">Mohamed Abbas</a></p>
+		</div>
+		<div class="review-card">
+			<div class="stars">★★★★★</div>
+			<p><strong>eEuroparts My No 1 go to.</strong><br>
+			&quot;eEuroparts has good prices and hassle free service. They have lots of parts for my North American MB Sprinter but you have to know what you need as they often default to the European Sprinter models and not all the parts are the same. Having said that. I got high quality parts at a great price and they fit perfectly. Lots of quality brand names to choose from and good selection. This is now the first place I look for parts.&quot; - <a href="https://www.trustpilot.com/reviews/6112c6d3f9f48708742df4be" rel="noopener noreferrer" target="_blank">Daniel R</a></p>
+		</div>
+	</section>
+
+	<!-- ======================== CLOSING CTA ======================== -->
+	<section class="closing-cta">
+		<h3>Shop now at eEuroparts.com - your trusted partner for quality automotive parts at unbeatable prices!</h3>
+	</section>
+	<script>
+		document.addEventListener("DOMContentLoaded", function()
+		{
+			document.querySelectorAll("img").forEach(function(img)
+			{
+				if (!img.hasAttribute("title") && img.hasAttribute("alt"))
+				{
+					img.setAttribute("title", img.getAttribute("alt"));
+				}
+			});
+		});
+
+	</script>
+	<script src="/js/carousel.js" defer=""></script>
+	<script src="/js/lightbox.js" defer=""></script>

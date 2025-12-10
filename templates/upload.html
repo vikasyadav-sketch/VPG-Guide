@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eEuroparts VPG Guide Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .title-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 80px 40px;
+            text-align: center;
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-top: 12px;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: -40px auto 60px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            padding: 48px;
+            position: relative;
+        }
+
+        .upload-section {
+            margin-bottom: 30px;
+        }
+
+        .upload-section h2 {
+            color: #1e293b;
+            font-size: 19px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .file-input-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .file-input-wrapper label {
+            display: block;
+            margin-bottom: 8px;
+            color: #000000;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .file-input-wrapper label .required {
+            color: #dc3545;
+        }
+
+        .file-input {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: #ffffff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 600;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .file-input-label:hover {
+            background: #3b82f6;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .file-input-label.uploaded {
+            background: #10b981;
+            border-color: #10b981;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        .file-input-label.uploaded:hover {
+            background: #059669;
+            border-color: #059669;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .file-input input[type=file]:focus + .file-input-label {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        .file-name {
+            display: none;
+            margin-top: 12px;
+            padding: 14px 18px;
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            border-left: 4px solid #10b981;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #065f46;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+        }
+
+        .file-name.show {
+            display: block !important;
+        }
+
+        .file-name strong {
+            color: #047857;
+        }
+
+        .file-name small {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #002d72;
+        }
+
+        .helper-text code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #dc3545;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            width: auto;
+            min-width: 280px;
+            max-width: 360px;
+            padding: 16px 48px;
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin: 32px auto 0;
+            letter-spacing: 0.3px;
+            display: block;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #721c24;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #155724;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #dc3545;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #3b82f6;
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e40af;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .title-section {
+                padding: 40px 20px;
+            }
+
+            .main-title {
+                font-size: 32px;
+            }
+
+            .container {
+                margin: -20px 20px 20px;
+                padding: 25px;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .submit-btn {
+                font-size: 16px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title-section">
+        <div class="main-title">Vehicle Platform Guide Generator</div>
+        <p class="subtitle">Upload your formatted document and car images to generate vehicle platform guide for eEuroparts(Internal Purpose Use Only!)</p>
+    </div>
+
+    <div class="container">
+        <div class="info-box">
+            <strong>📋 Required:</strong>
+            • A properly formatted .docx document<br>
+            • At least one car image (front, side, rear, or quarter view)
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing your document...</p>
+        </div>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="upload-section">
+                <h2>Document File</h2>
+                <div class="file-input-wrapper">
+                    <label for="docx_file">
+                        Word Document <span class="required">*</span>
+                    </label>
+                    <div class="file-input">
+                        <input type="file" id="docx_file" name="docx_file" accept=".docx" required style="position: absolute; left: -9999px;">
+                        <label for="docx_file" class="file-input-label" id="docx_label">
+                            📄 Choose .docx file
+                        </label>
+                    </div>
+                    <div class="file-name" id="docx_name" style="min-height: 20px;"></div>
+                </div>
+            </div>
+
+            <div class="upload-section">
+                <h2>Car Images</h2>
+                <p class="helper-text" style="margin-bottom: 15px; margin-top: -10px;">
+                    💡 Upload 4 car images at once (front, side, rear, quarter views). Examples: <code>car_front.jpg</code>, <code>BMW_M3_side.png</code>, <code>audi_rear_view.jpeg</code>, <code>mercedes_quarter.jpg</code>
+                </p>
+                <div class="file-input-wrapper">
+                    <label for="car_images">Car Images (Multiple) <span class="required">*</span></label>
+                    <div class="file-input">
+                        <input type="file" id="car_images" name="car_images" accept="image/jpeg,image/jpg,image/png" multiple required>
+                        <label for="car_images" class="file-input-label" id="car_images_label">
+                            🖼️ Choose images
+                        </label>
+                    </div>
+                    <div class="file-name" id="car_images_name"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Generate HTML Guide
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Debug: Check if elements exist on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== Page Loaded - Checking Elements ===');
+            const docxName = document.getElementById('docx_name');
+            const docxLabel = document.getElementById('docx_label');
+            const docxFile = document.getElementById('docx_file');
+            
+            console.log('docx_name div:', docxName);
+            console.log('docx_label:', docxLabel);
+            console.log('docx_file input:', docxFile);
+            
+            // Manually add event listener to docx_file as backup
+            if (docxFile) {
+                console.log('Adding manual listener to docx_file');
+                docxFile.addEventListener('change', function(e) {
+                    console.log('=== MANUAL DOCX CHANGE EVENT ===');
+                    console.log('Files:', this.files);
+                    
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+                        const fileSize = (file.size / 1024).toFixed(1);
+                        const sizeDisplay = fileSize > 1024 
+                            ? `${(fileSize / 1024).toFixed(2)} MB` 
+                            : `${fileSize} KB`;
+                        
+                        if (docxName) {
+                            docxName.innerHTML = `✓ <strong>${file.name}</strong> (${sizeDisplay})`;
+                            docxName.classList.add('show');
+                            docxName.style.display = 'block';
+                            console.log('Set docxName content');
+                        }
+                        
+                        if (docxLabel) {
+                            docxLabel.classList.add('uploaded');
+                            docxLabel.innerHTML = `✓ 📄 Document uploaded!`;
+                            docxLabel.style.background = '#10b981';
+                            docxLabel.style.borderColor = '#10b981';
+                            docxLabel.style.color = '#ffffff';
+                            console.log('Updated docxLabel');
+                        }
+                    }
+                });
+            }
+        });
+
+        // File input display handlers with visual feedback
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        console.log('Found file inputs:', fileInputs.length);
+        
+        fileInputs.forEach(input => {
+            console.log('Setting up listener for:', input.id);
+            
+            input.addEventListener('change', function(e) {
+                console.log('=== FILE CHANGE EVENT ===');
+                console.log('File selected for:', this.id);
+                console.log('Files count:', this.files.length);
+                
+                const fileNameDiv = document.getElementById(this.id + '_name');
+                const labelElement = document.getElementById(this.id + '_label');
+                
+                console.log('fileNameDiv found:', !!fileNameDiv);
+                console.log('labelElement found:', !!labelElement);
+                
+                if (!fileNameDiv || !labelElement) {
+                    console.error('ERROR: Required elements not found!');
+                    return;
+                }
+                
+                if (this.files.length > 0) {
+                    if (this.id === 'car_images') {
+                        // Handle multiple car images
+                        console.log('Handling car_images');
+                        let totalSize = 0;
+                        let fileList = '';
+                        
+                        Array.from(this.files).forEach((file, index) => {
+                            totalSize += file.size;
+                            fileList += `${index + 1}. ${file.name}<br>`;
+                        });
+                        
+                        const sizeInKB = (totalSize / 1024).toFixed(1);
+                        const sizeDisplay = sizeInKB > 1024 
+                            ? `${(sizeInKB / 1024).toFixed(2)} MB` 
+                            : `${sizeInKB} KB`;
+                        
+                        fileNameDiv.innerHTML = `✓ <strong>${this.files.length} images selected</strong> (${sizeDisplay})<br><small style="margin-top:8px;display:block;color:#64748b;">${fileList}</small>`;
+                        fileNameDiv.classList.add('show');
+                        fileNameDiv.style.display = 'block';
+                        
+                        labelElement.classList.add('uploaded');
+                        labelElement.innerHTML = `✓ 🖼️ ${this.files.length} images uploaded!`;
+                        labelElement.style.background = '#10b981';
+                        labelElement.style.borderColor = '#10b981';
+                        labelElement.style.color = '#ffffff';
+                        console.log('Car images updated successfully');
+                        
+                    } else if (this.id === 'docx_file') {
+                        // Handle docx file
+                        console.log('Handling docx_file');
+                        const file = this.files[0];
+                        const fileSize = (file.size / 1024).toFixed(1);
+                        const sizeDisplay = fileSize > 1024 
+                            ? `${(fileSize / 1024).toFixed(2)} MB` 
+                            : `${fileSize} KB`;
+                        
+                        fileNameDiv.innerHTML = `✓ <strong>${file.name}</strong> (${sizeDisplay})`;
+                        fileNameDiv.classList.add('show');
+                        fileNameDiv.style.display = 'block';
+                        
+                        labelElement.classList.add('uploaded');
+                        labelElement.innerHTML = `✓ 📄 Document uploaded!`;
+                        labelElement.style.background = '#10b981';
+                        labelElement.style.borderColor = '#10b981';
+                        labelElement.style.color = '#ffffff';
+                        console.log('DOCX updated successfully');
+                    }
+                } else {
+                    // Reset to original state
+                    fileNameDiv.textContent = '';
+                    fileNameDiv.classList.remove('show');
+                    fileNameDiv.style.display = 'none';
+                    
+                    if (labelElement) {
+                        labelElement.classList.remove('uploaded');
+                        if (this.id === 'car_images') {
+                            labelElement.innerHTML = '🖼️ Choose images';
+                        } else if (this.id === 'docx_file') {
+                            labelElement.innerHTML = '📄 Choose .docx file';
+                        }
+                    }
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            const loadingDiv = document.getElementById('loading');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('uploadForm');
+
+            // Hide messages
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+
+            // Validate at least one image is provided
+            const carImagesInput = document.getElementById('car_images');
+            if (!carImagesInput.files || carImagesInput.files.length === 0) {
+                errorDiv.textContent = 'Please upload at least one car image.';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            // Show loading
+            loadingDiv.classList.add('show');
+            submitBtn.disabled = true;
+            form.style.opacity = '0.5';
+
+            try {
+                const formData = new FormData(this);
+                
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    // Get the HTML content
+                    const htmlContent = await response.text();
+                    
+                    // Create a blob and download it
+                    const blob = new Blob([htmlContent], { type: 'text/html' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'vehicle_guide.html';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    // Show success message
+                    successDiv.textContent = '✓ HTML guide generated successfully! Download started.';
+                    successDiv.classList.add('show');
+
+                    // Reset form
+                    this.reset();
+                    document.querySelectorAll('.file-name').forEach(div => {
+                        div.textContent = '';
+                        div.classList.remove('show');
+                    });
+                    
+                    // Reset all labels to original state
+                    document.querySelectorAll('.file-input-label').forEach(label => {
+                        label.classList.remove('uploaded');
+                    });
+                    document.getElementById('docx_label').innerHTML = '📄 Choose .docx file';
+                    document.getElementById('car_images_label').innerHTML = '🖼️ Choose images';
+                } else {
+                    const error = await response.json();
+                    errorDiv.textContent = error.error || 'An error occurred while processing your request.';
+                    errorDiv.classList.add('show');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Network error: ' + error.message;
+                errorDiv.classList.add('show');
+            } finally {
+                loadingDiv.classList.remove('show');
+                submitBtn.disabled = false;
+                form.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>
