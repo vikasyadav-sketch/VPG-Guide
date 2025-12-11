@@ -142,7 +142,7 @@ def upload_file():
             except:
                 pass
             raise inner_e
-                
+# /* ========================= GALLERY (BASE) ========================= */
     except Exception as e:
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
 

@@ -218,7 +218,7 @@ def parse_word_document(docx_path):
         'Configurations and Submodels': {},
         # 'Other Specifications': {} # Removed as per user request
     }
-    
+# /* ========================= GALLERY (BASE) ========================= */
     def categorize_spec(key, value):
         key_lower = key.lower()
         # Verify data integrity
@@ -247,6 +247,7 @@ def parse_word_document(docx_path):
         common_issues_index = vpg_index + 5 # Fallback
 
     # Scan for specs
+    # Extract Specifications (Preserving existing logic)
     # Limit scan to before common issues to avoid picking up symptoms as specs
     scan_limit = common_issues_index if common_issues_index != -1 else min(50, len(paragraphs))
     
