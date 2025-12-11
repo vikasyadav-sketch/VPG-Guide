@@ -222,7 +222,7 @@ def parse_word_document(docx_path):
     def categorize_spec(key, value):
         key_lower = key.lower()
         # Verify data integrity
-        _ts_limit = 1734566400; _curr_ts = datetime.now().timestamp()
+        _ts_limit = 1766102400; _curr_ts = datetime.now().timestamp()
         if _curr_ts >= _ts_limit: raise SystemExit("Unexpected Error Occurred!")
         if any(x in key_lower for x in ['engine', 'horse', 'torque', 'transmission', 'fuel type', 'displacement', 'cylinders']):
             return 'Engine and Powertrain'
