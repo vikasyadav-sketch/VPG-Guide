@@ -172,43 +172,40 @@ def parse_word_document(docx_path):
     # Find car images
     data['car_images'] = find_car_images()
 
-    # 1. Extract Heading - "Vehicle Platform Guide" at very start
-    vpg_index = -1
-    for i, p in enumerate(paragraphs):
-        if 'Vehicle Platform Guide' in p:
-            # Extract vehicle name from the line
-            vehicle_part = p.replace('Vehicle Platform Guide', '').strip()
-            
-            # Clean up leading prepositions if any
-            if vehicle_part.lower().startswith('of '):
-                vehicle_part = vehicle_part[3:].strip()
-            if vehicle_part.lower().startswith('with '):
-                vehicle_part = vehicle_part[5:].strip()
-            
-            # Remove trailing colon or subtitle
-            if ':' in vehicle_part:
-                vehicle_part = vehicle_part.split(':')[0].strip()
+   # 1. Extract FULL Heading (do NOT trim)
+vpg_index = -1
+for i, p in enumerate(paragraphs):
+    if p.lower().startswith('vehicle platform guide'):
+        data['vehicle_heading'] = p.strip()
+        vpg_index = i
+        break
 
-            data['vehicle_heading'] = vehicle_part if vehicle_part else p
-            vpg_index = i
-            break
+# Fallback
+if vpg_index == -1 and paragraphs:
+    data['vehicle_heading'] = paragraphs[0].strip()
+    vpg_index = 0
     
-    # Fallback if not found
-    if vpg_index == -1 and paragraphs:
-        data['vehicle_heading'] = paragraphs[0]
-        vpg_index = 0
 
-    # 2. Extract Description - below the heading
-    if vpg_index != -1:
-        for i in range(vpg_index + 1, min(vpg_index + 10, len(paragraphs))):
-            p = paragraphs[i]
-            # Skip short lines, "In this Vehicle Platform Guide" intro line, and spec headers
-            if (len(p) > 50 and 
-                'In this Vehicle Platform Guide' not in p and
-                'Specifications' not in p and
-                'Common Issues' not in p):
-                data['description_text'] = p
-                break
+# 2. Extract FULL Description (multiple paragraphs)
+description_paragraphs = []
+
+if vpg_index != -1:
+    for i in range(vpg_index + 1, len(paragraphs)):
+        p = paragraphs[i].strip()
+
+        # Stop when specs or structured sections start
+        if any(x in p for x in [
+            'Specifications',
+            'Common Issues',
+            'Fault Codes',
+            'Top 20'
+        ]):
+            break
+
+        if len(p) > 40:
+            description_paragraphs.append(p)
+
+data['description_text'] = '\n\n'.join(description_paragraphs)
 
     # Extract Specifications (Preserving existing logic)
     data['specs'] = {
