@@ -220,6 +220,9 @@ def parse_word_document(docx_path):
     data['specs'] = {
         'Engine and Powertrain': {},
         'Fuel Economy (EPA Estimates)': {},
+        'Vehicle Weight': {},
+        'Configurations and Submodels': {}
+        #'Other Specifications':{}# Removed as per user Request
     }
 
     # Extract Heading before Category Issue
