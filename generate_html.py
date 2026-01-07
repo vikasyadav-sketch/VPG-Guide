@@ -172,20 +172,18 @@ def parse_word_document(docx_path):
     # Find car images
     data['car_images'] = find_car_images()
 
-   # 1. Extract FULL Heading (do NOT trim)
+# 1. Extract FULL Heading (do NOT trim)
 vpg_index = -1
 for i, p in enumerate(paragraphs):
     if p.lower().startswith('vehicle platform guide'):
         data['vehicle_heading'] = p.strip()
         vpg_index = i
         break
-
 # Fallback
 if vpg_index == -1 and paragraphs:
     data['vehicle_heading'] = paragraphs[0].strip()
     vpg_index = 0
     
-
 # 2. Extract FULL Description (multiple paragraphs)
 description_paragraphs = []
 
