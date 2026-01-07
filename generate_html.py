@@ -172,49 +172,59 @@ def parse_word_document(docx_path):
     # Find car images
     data['car_images'] = find_car_images()
 
-# 1. Extract FULL Heading (do NOT trim)
+ # --------------------------------------------------
+# 1. Extract FULL Heading (no trimming, SEO-safe)
+# --------------------------------------------------
+
 vpg_index = -1
+
 for i, p in enumerate(paragraphs):
     if p.lower().startswith('vehicle platform guide'):
         data['vehicle_heading'] = p.strip()
         vpg_index = i
         break
 
-# Fallback
+# Fallback if heading not found
 if vpg_index == -1 and paragraphs:
     data['vehicle_heading'] = paragraphs[0].strip()
     vpg_index = 0
 
-   # 2. Extract FULL Description (multiple paragraphs)
+
+# --------------------------------------------------
+# 2. Extract FULL Description (multiple paragraphs)
+# --------------------------------------------------
+
 description_paragraphs = []
 
 if vpg_index != -1:
     for i in range(vpg_index + 1, len(paragraphs)):
         p = paragraphs[i].strip()
 
-        # Stop when specs or structured sections start
-        if any(x in p for x in [
+        # Stop when structured sections start
+        if any(x in p for x in (
             'Specifications',
             'Common Issues',
             'Fault Codes',
             'Top 20'
-        ]):
+        )):
             break
 
         if len(p) > 40:
             description_paragraphs.append(p)
+
 data['description_text'] = '\n\n'.join(description_paragraphs)
 
-    # Extract Specifications (Preserving existing logic)
-    data['specs'] = {
-        'Engine and Powertrain': {},
-        'Fuel Economy (EPA Estimates)': {},
-        'Vehicle Weight': {},
-        'Configurations and Submodels': {},
-        # 'Other Specifications': {} # Removed as per user request
-    }
+
+# --------------------------------------------------
+# 3. Extract Specifications (preserving existing logic)
+# --------------------------------------------------
+
+data['specs'] = {
+    'Engine and Powertrain': {},
+    'Fuel Economy (EPA Estimates)': {},
+}
 # /* ========================= GALLERY (BASE) ========================= */
-    def categorize_spec(key, value):
+def categorize_spec(key, value):
         key_lower = key.lower()
  
         if any(x in key_lower for x in ['engine', 'horse', 'torque', 'transmission', 'fuel type', 'displacement', 'cylinders']):
