@@ -203,7 +203,6 @@ if vpg_index != -1:
 
         if len(p) > 40:
             description_paragraphs.append(p)
-
 data['description_text'] = '\n\n'.join(description_paragraphs)
 
     # Extract Specifications (Preserving existing logic)
