@@ -112,7 +112,7 @@ def upload_file():
                 for view, filename in image_paths.items():
                     if filename:
                         # Use the same URL structure as in generate_html.py
-                        data['car_images'][view] = f'https://admin.eeuroparts.com/var/theme/images/{filename}'
+                        data['car_images'][view] = f'https://admin.Newparts.com/var/theme/images/{filename}'
                 
                 # Generate HTML
                 template_path = os.path.join(original_dir, 'template.html')
