@@ -1,0 +1,2997 @@
+<style>
+	:root {
+		--text: #000;
+		--muted: #555;
+		--border: #111;
+		--card: #f6f7f9;
+		--badge: #ff8a00;
+		--link: #0a56c2;
+		/* easy knobs */
+		--backTopBottom: 64px;
+		/* back-to-top vertical offset */
+		--catFloatTop: calc(env(safe-area-inset-top, 0px) + 100px);
+		/* floating category bar offset */
+	}
+	
+	html {
+		scroll-behavior: auto;
+	}
+	
+	body {
+		margin: 0;
+		font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+		color: var(--text);
+		background: #fff;
+		line-height: 1.6;
+	}
+	
+	h1,
+	h2 {
+		font-size: 32px;
+		color: #000;
+		line-height: 1.25;
+		margin: 0 0 14px;
+		letter-spacing: .2px;
+	}
+	
+	p,
+	li {
+		font-size: 18px;
+	}
+	
+	.lead {
+		color: #000;
+	}
+	
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 20px 16px 60px;
+	}
+	
+	.top-wrap {
+		display: grid;
+		grid-template-columns: 1.05fr 1fr;
+		gap: 28px;
+		align-items: start;
+	}
+	/* ========================= GALLERY (BASE) ========================= */
+	/* ========================= GALLERY (BASE) ========================= */
+	
+	.gallery {
+		position: relative;
+	}
+	
+	.gallery-main {
+		width: 100%;
+		aspect-ratio: 16/9;
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		overflow: hidden;
+		background: #fff;
+		position: relative;
+		/* for arrows */
+		touch-action: pan-y;
+	}
+	
+	.gallery-main img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		user-select: none;
+		-webkit-user-drag: none;
+		pointer-events: none;
+		/* allow swipe over image */
+	}
+	/* Thumbnails */
+	
+	.thumbs {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+		margin-top: 12px;
+	}
+	
+	.thumb {
+		border: 1px solid #ccc;
+		border-radius: 10px;
+		overflow: hidden;
+		background: #fff;
+		cursor: pointer;
+		transition: transform .12s, box-shadow .12s, border-color .12s;
+	}
+	
+	.thumb:focus,
+	.thumb:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+		border-color: #888;
+	}
+	
+	.thumb img {
+		width: 100%;
+		height: 100%;
+		aspect-ratio: 4/3;
+		object-fit: cover;
+		display: block;
+	}
+	/* Intro card */
+	
+	.intro {
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 14px;
+		padding: 18px 18px 8px;
+	}
+	/* # Cleanup on inner exception */
+	
+	.intro h1 {
+		margin-bottom: 10px;
+	}
+	
+	.divider {
+		height: 1px;
+		background: #000;
+		border: 0;
+		margin: 30px 0;
+	}
+	/* ========================= SPECS (BASE) ========================= */
+	
+	.specs {
+		background: #f6f7f9;
+		border: 1px solid #e1e4e8;
+		border-radius: 14px;
+		padding: 18px;
+	}
+	
+	.spec-block {
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 12px;
+		padding: 0;
+		/* head/body separation */
+		margin-bottom: 20px;
+		overflow: hidden;
+	}
+	
+	.spec-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		/* arrow to right edge */
+		gap: 12px;
+		padding: 14px 16px;
+		cursor: pointer;
+		background: #fff;
+	}
+	
+	.spec-head h3 {
+		font-size: 18px;
+		margin: 0;
+		color: #000;
+		font-weight: 700;
+	}
+	
+	.spec-toggle {
+		appearance: none;
+		border: 0;
+		background: transparent;
+		width: 36px;
+		height: 36px;
+		border-radius: 8px;
+		display: grid;
+		place-items: center;
+	}
+	
+	.spec-toggle:focus {
+		outline: 2px solid #000;
+		outline-offset: 2px;
+	}
+	
+	.chev {
+		display: inline-block;
+		transition: transform .2s ease;
+		font-size: 18px;
+		line-height: 1;
+	}
+	
+	.spec-body {
+		padding: 0 16px 14px;
+	}
+	
+	.spec-dl {
+		display: grid;
+		grid-template-columns: minmax(180px, 260px) 1fr;
+		column-gap: 24px;
+		row-gap: 12px;
+		margin: 0;
+	}
+	/* ========================= TABS / CATEGORY BAR (BASE) ========================= */
+	
+	.tabbar-wrap {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 14px;
+	}
+	
+	.tabbar {
+		flex: 1 1 auto;
+		display: flex;
+		gap: 6px;
+		background: #f1f5f9;
+		border: 1px solid #e5e7eb;
+		border-radius: 10px;
+		padding: 6px;
+	}
+	
+	.tabbar [role="tab"] {
+		position: relative;
+		appearance: none;
+		background: #fff;
+		border: 1px solid #e5e7eb;
+		border-radius: 8px;
+		padding: 10px 14px;
+		font-size: 16px;
+		cursor: pointer;
+		color: #000;
+		white-space: nowrap;
+	}
+	
+	.tabbar [role="tab"][aria-selected="true"] {
+		border-color: #cbd5e1;
+	}
+	
+	.tabbar [role="tab"][aria-selected="true"]::after {
+		content: "";
+		position: absolute;
+		left: 10px;
+		right: 10px;
+		bottom: -7px;
+		height: 3px;
+		background: #1e73ff;
+		border-radius: 3px;
+	}
+	
+	.tabbar [role="tab"]:focus {
+		outline: 2px solid #000;
+		outline-offset: 2px;
+	}
+	
+	.tab-next {
+		flex: 0 0 auto;
+		width: 36px;
+		height: 36px;
+		border-radius: 999px;
+		border: 1px solid #e5e7eb;
+		background: #fff;
+		cursor: pointer;
+		line-height: 36px;
+		text-align: center;
+		font-size: 18px;
+	}
+	
+	.tab-next:focus {
+		outline: 2px solid #000;
+		outline-offset: 2px;
+	}
+	
+	.tabs {
+		margin-top: 26px;
+	}
+	
+	.tab-panel {
+		display: none;
+		padding-top: 18px;
+	}
+	
+	.tab-panel[aria-hidden="false"] {
+		display: block;
+	}
+	/* Issue card (unchanged base) */
+	
+	.issue {
+		display: grid;
+		grid-template-columns: 300px 1fr;
+		gap: 18px;
+		align-items: start;
+		border: 1px solid #e6e6e6;
+		border-radius: 14px;
+		padding: 16px;
+		background: #fff;
+		margin-bottom: 0;
+	}
+	
+	.issue-media figure {
+		margin: 0;
+		border: 1px solid #e6e6e6;
+		border-radius: 12px;
+		overflow: hidden;
+		background: #fff;
+	}
+	
+	.issue-media img {
+		width: 100%;
+		height: auto;
+		display: block;
+		object-fit: cover;
+	}
+	
+	.issue-media figcaption {
+		font-size: 14px;
+		padding: 8px 10px;
+		background: #fafafa;
+		border-top: 1px solid #eee;
+	}
+	
+	.issue h3 {
+		font-size: 18px;
+		margin: 0 0 8px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	
+	.issue h4 {
+		font-size: 18px;
+		margin: 0 0 8px;
+	}
+	
+	.badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 14px;
+		font-weight: 700;
+		background: var(--badge);
+		color: #000;
+		border-radius: 999px;
+		padding: 4px 10px;
+		white-space: nowrap;
+	}
+	
+	.issue-block {
+		margin: 12px 0;
+	}
+	
+	.issue-block h4 {
+		font-size: 18px;
+		margin: 0 0 6px;
+		color: #000;
+		font-weight: 700;
+	}
+	
+	.issue-content >:last-child {
+		margin-bottom: 0;
+	}
+	
+	.parts-list,
+	.symptom-list,
+	.brand-list {
+		margin: 0;
+		padding-left: 18px;
+	}
+	
+	.parts-list li,
+	.symptom-list li {
+		margin: 6px 0;
+	}
+	
+	.brand-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 12px;
+		list-style: none;
+		padding-left: 0;
+	}
+	
+	.brand-list li {
+		font-size: 16px;
+		border: 1px solid #e2e2e2;
+		padding: 6px 10px;
+		border-radius: 999px;
+		background: #fafafa;
+	}
+	/* Links */
+	
+	a {
+		color: var(--link);
+		text-decoration: none;
+	}
+	
+	a:hover {
+		text-decoration: underline;
+	}
+	/* Helpers */
+	
+	.parts-list li {
+		overflow-wrap: anywhere;
+	}
+	
+	.spec-dl dt {
+		font-weight: 700;
+	}
+	/* ========================= NEW: GALLERY ARROWS (MOBILE + DESKTOP) ========================= */
+	
+	.gallery-arrow {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		border: 0;
+		background: rgba(0, 0, 0, 0.55);
+		color: #fff;
+		display: grid;
+		place-items: center;
+		cursor: pointer;
+		z-index: 2;
+	}
+	
+	.gallery-arrow:focus {
+		outline: 2px solid #fff;
+		outline-offset: 2px;
+	}
+	
+	.gallery-arrow.left {
+		left: 10px;
+	}
+	
+	.gallery-arrow.right {
+		right: 10px;
+	}
+	/* ========================= NEW: FLOATING CATEGORY BAR (MOBILE ONLY) ========================= */
+	/* polished design per best practices */
+	
+	@media (max-width: 900px) {
+		.tabbar {
+			overflow-x: auto;
+			overflow-y: hidden;
+			white-space: nowrap;
+			scrollbar-width: thin;
+		}
+		.tabbar::-webkit-scrollbar {
+			height: 8px;
+		}
+		.tabbar::-webkit-scrollbar-thumb {
+			background: #cbd5e1;
+			border-radius: 8px;
+		}
+		.tabbar-wrap.floating-on-mobile {
+			position: sticky;
+			top: var(--catFloatTop);
+			/* <= adjust with CSS var */
+			z-index: 1000;
+			padding: 6px 0;
+			/* space for edge fades */
+			background: transparent;
+		}
+		/* Card look behind the tabs */
+		.tabbar-wrap.floating-on-mobile .tabbar {
+			background: rgba(255, 255, 255, 0.85);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border: 1px solid #e5e7eb;
+			border-radius: 14px;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+			padding: 8px;
+			overflow-x: auto;
+			overflow-y: hidden;
+			white-space: nowrap;
+			scrollbar-width: none;
+		}
+		.tabbar-wrap.floating-on-mobile .tabbar::-webkit-scrollbar {
+			display: none;
+		}
+		/* Pills */
+		.tabbar-wrap.floating-on-mobile .tabbar [role="tab"] {
+			border-radius: 999px;
+			border: 1px solid #e5e7eb;
+			background: #fff;
+			padding: 20px 25px;
+			font-size: 15px;
+			line-height: 1;
+		}
+		.tabbar-wrap.floating-on-mobile .tabbar [role="tab"][aria-selected="true"] {
+			border-color: #cbd5e1;
+			box-shadow: inset 0 0 0 1px #cbd5e1;
+		}
+		.tabbar-wrap.floating-on-mobile .tabbar [role="tab"][aria-selected="true"]::after {
+			display: none;
+		}
+		/* Edge fade hints */
+		.tabbar-wrap.floating-on-mobile::before,
+		.tabbar-wrap.floating-on-mobile::after {
+			content: "";
+			position: absolute;
+			top: 6px;
+			bottom: 6px;
+			width: 28px;
+			pointer-events: none;
+			z-index: 1;
+		}
+		.tabbar-wrap.floating-on-mobile::before {
+			left: 0;
+			background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+		}
+		.tabbar-wrap.floating-on-mobile::after {
+			right: 0;
+			background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+		}
+		.tabbar-wrap.floating-on-mobile.no-left-fade::before {
+			opacity: 0;
+		}
+		.tabbar-wrap.floating-on-mobile.no-right-fade::after {
+			opacity: 0;
+		}
+		/* Out-of-range revert */
+		.tabbar-wrap.floating-on-mobile.out-of-range {
+			position: static;
+			box-shadow: none;
+		}
+		/* Optional smaller "next" on mobile */
+		.tab-next {
+			width: 34px;
+			height: 34px;
+			font-size: 18px;
+			border-radius: 50%;
+			border: 1px solid #e5e7eb;
+			background: #fff;
+		}
+	}
+	/* ========================= NEW: SPECS ACCORDION (MOBILE ONLY) ========================= */
+	
+	@media (max-width: 900px) {
+		.spec-block .spec-body {
+			display: none;
+		}
+		.spec-block.acc-open .spec-body {
+			display: block;
+		}
+		.spec-block .chev {
+			transform: rotate(0deg);
+		}
+		.spec-block.acc-open .chev {
+			transform: rotate(180deg);
+		}
+	}
+	
+	@media (min-width: 901px) {
+		.spec-toggle {
+			display: none;
+		}
+		.spec-head {
+			cursor: default;
+		}
+		.spec-block .spec-body {
+			display: block !important;
+		}
+	}
+	/* ========================= NEW: BACK TO TOP (MOBILE LEFT-BOTTOM) ========================= */
+	
+	#backToTop {
+		position: fixed;
+		left: 16px;
+		bottom: var(--backTopBottom);
+		z-index: 1100;
+		width: 48px;
+		height: 48px;
+		border-radius: 999px;
+		border: 0;
+		background: #111;
+		color: #fff;
+		font-size: 20px;
+		line-height: 1;
+		display: none;
+		/* shown by JS on scroll */
+		box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+	}
+	
+	#backToTop.show {
+		display: grid;
+		place-items: center;
+	}
+	
+	@media (min-width: 901px) {
+		#backToTop {
+			display: none !important;
+		}
+	}
+	/* ===================== Responsive (kept from baseline) ===================== */
+	
+	@media (max-width:1100px) {
+		.top-wrap {
+			grid-template-columns: 1fr;
+		}
+	}
+	
+	@media (max-width:900px) {
+		.issue {
+			grid-template-columns: 1fr;
+		}
+		.thumbs {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	
+	@media (max-width:700px) {
+		.gallery-main {
+			aspect-ratio: 4/3;
+		}
+		.thumbs {
+			grid-template-columns: repeat(2, 1fr);
+		}
+		.container {
+			padding: 16px 12px 48px;
+		}
+		.tabbar [role="tab"] {
+			padding: 10px 12px;
+			font-size: 15px;
+		}
+		.spec-dl {
+			grid-template-columns: 1fr;
+			row-gap: 10px;
+		}
+	}
+	
+	@media (max-width:480px) {
+		.thumbs {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+		}
+		.issue {
+			padding: 14px;
+		}
+		.issue-media figcaption {
+			font-size: 13px;
+		}
+		.brand-list li {
+			font-size: 15px;
+		}
+		.tab-next {
+			width: 32px;
+			height: 32px;
+			line-height: 32px;
+		}
+	}
+	
+	.sr-only {
+		position: absolute !important;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+	/* ===== Hide thumbnails on mobile completely (no pile under gallery) ===== */
+	
+	@media (max-width: 900px) {
+		#thumbs {
+			display: none !important;
+		}
+	}
+	/* ======================= PATCH: Floating Category Dropdown (mobile) ======================= */
+	/* PATCH START: CSS for floating dropdown + remove stray arrow */
+	
+	#tabbarWrap .cat-dropdown {
+		display: none;
+		margin: 8px 0;
+	}
+	
+	#tabbarWrap .cat-dropdown select {
+		width: 100%;
+		padding: 12px 16px;
+		border: 2px solid #001b6e;
+		border-radius: 15px;
+		background: #001b6e;
+		font-size: 18px;
+		color: #ffffff;
+		box-shadow: 0 6px 10px rgba(0, 0, 0, 0.20);
+		transition: box-shadow 0.3s ease;
+	}
+	
+	#tabbarWrap .cat-dropdown select:hover,
+	#tabbarWrap .cat-dropdown select:focus {
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.30);
+	}
+	
+	@media (max-width:900px) {
+		#tabbarWrap {
+			position: sticky;
+			top: var(--catFloatTop, 60px);
+			z-index: 1000;
+			padding: 6px 0;
+			box-shadow: 0 0px 0px rgba(0, 0, 0, .06);
+		}
+		#tabbarWrap .tabbar {
+			display: none;
+		}
+		/* hide desktop pills on mobile */
+		#tabbarWrap .cat-dropdown {
+			display: block;
+		}
+		/* show dropdown on mobile */
+	}
+	
+	.tab-next {
+		display: none !important;
+	}
+	/* kill stray arrow globally */
+	/* PATCH END */
+	/* ========================= WHY Newparts SECTION ========================= */
+	
+	.why-Newparts {
+		margin: 40px 0;
+		padding: 0 16px;
+	}
+	
+	.why-Newparts h4 {
+		font-size: 20px;
+		margin: 24px 0 12px;
+		color: #000;
+		font-weight: 600;
+	}
+	
+	.why-Newparts p {
+		margin: 0 0 16px;
+		line-height: 1.6;
+	}
+	/* ========================= FAQ SECTION ========================= */
+	
+	#faq {
+		margin: 40px 0;
+		background: var(--card, #f8f9fb);
+		border: 1px solid var(--border, #e1e4e8);
+		border-radius: 14px;
+		padding: 18px;
+	}
+	
+	#faq h2 {
+		font-size: 24px;
+		margin: 0 0 12px;
+		color: var(--text-strong, #000);
+	}
+	
+	#faq .faq-list {
+		display: grid;
+		gap: 10px;
+	}
+	
+	#faq .faq-item {
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 12px;
+		overflow: hidden;
+	}
+	
+	#faq .faq-q {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		cursor: pointer;
+		padding: 14px 16px;
+		font-weight: 700;
+		color: var(--text-strong, #000);
+		list-style: none;
+	}
+	
+	#faq .faq-q::-webkit-details-marker {
+		display: none;
+	}
+	
+	#faq .faq-a {
+		padding: 0 16px 14px;
+		color: var(--text, #222);
+		font-size: 16px;
+	}
+	
+	#faq .chev {
+		display: inline-block;
+		transition: transform .2s ease;
+		font-size: 18px;
+		line-height: 1;
+	}
+	
+	#faq .faq-item[open] .chev {
+		transform: rotate(180deg);
+	}
+	/* ========================= CUSTOMER REVIEWS ========================= */
+	
+	.reviews {
+		margin: 40px 0;
+		background: #f6f7f9;
+		border: 1px solid #e1e4e8;
+		border-radius: 14px;
+		padding: 18px;
+	}
+	
+	.reviews h2 {
+		font-size: 22px;
+		margin: 0 0 16px;
+		color: #000;
+	}
+	
+	.review-card {
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 10px;
+		padding: 14px 16px;
+		margin-bottom: 12px;
+	}
+	
+	.review-card:last-child {
+		margin-bottom: 0;
+	}
+	
+	.review-card .stars {
+		color: #f5a623;
+		font-size: 18px;
+		margin-bottom: 6px;
+	}
+	
+	.review-card p {
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+	/* ========================= CLOSING CTA ========================= */
+	
+	.closing-cta {
+		text-align: center;
+		margin: 40px 0 20px;
+		padding: 0 16px;
+	}
+	
+	.closing-cta h3 {
+		font-size: 20px;
+		color: #000;
+		font-weight: 600;
+	}
+	/* ========================= RESPONSIVE ADJUSTMENTS ========================= */
+	
+	@media (max-width: 700px) {
+		#faq {
+			padding: 16px;
+		}
+		#faq .faq-q {
+			padding: 12px 14px;
+			font-size: 16px;
+		}
+		#faq .faq-a {
+			padding: 0 14px 12px;
+		}
+		.why-Newparts h4 {
+			font-size: 18px;
+			margin-top: 24px;
+		}
+	}
+
+</style>
+
+<p>
+	<br>
+</p>
+<script type="application/ld+json">
+	{ "@context": "https://schema.org", "@type": "Article", "headline": "Vehicle Platform Guide for Chevrolet Equinox 2010-2017 2.4L Ecotec: Top 20 Common Problems, Fault Codes, Solutions with Newparts", "about": { "@type": "Vehicle", "name": "Chevrolet Equinox 2010-2017 2.4L Ecotec", "brand": { "@type": "Brand", "name": "Chevrolet" }, "model": "Equinox", "vehicleModelDate": "2010-2017", "bodyType": "SUV", "vehicleSeatingCapacity": 5, "fuelType": "Gasoline", "vehicleTransmission": "6-speed automatic", "vehicleEngine": { "@type": "EngineSpecification", "name": "2.4L Inline-4 Ecotec", "engineType": "Inline-4", "fuelType": "Gasoline" } } }
+</script>
+<main class="container" itemscope="" itemtype="https://schema.org/Article">
+	<!-- Top: Album (left) + Content (right) -->
+	<section class="top-wrap">
+		<!-- ========= TOP IMAGE GALLERY (with swipe + arrows) ========= -->
+		<!-- [SECTION: GALLERY START] -->
+		<div aria-label="Vehicle image gallery" class="gallery" id="gallery">
+			<div class="gallery-main" id="galleryMain">
+				<!-- ARROWS overlay on image -->
+				<button aria-label="Previous image" class="gallery-arrow left" id="galPrev" type="button">&lsaquo;</button>
+				<button aria-label="Next image" class="gallery-arrow right" id="galNext" type="button">&rsaquo;</button><img id="mainImage" src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LFront.jpeg" alt="Vehicle Platform Guide for Chevrolet Equinox 2010-2017 2.4L Ecotec: Top 20 Common Problems, Fault Codes, Solutions with Newparts front view" loading="eager" class="fr-fil fr-dib"></div>
+			<div class="thumbs" id="thumbs" role="list">
+				<button aria-label="Show quarter view" class="thumb" data-src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LQuarter.jpeg" role="listitem"><img src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LQuarter.jpeg" alt="Quarter view thumbnail" loading="lazy" class="fr-fil fr-dib"></button>
+				<button aria-label="Show side view" class="thumb" data-src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LSide.jpeg" role="listitem"><img src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LSide.jpeg" alt="Side view thumbnail" loading="lazy" class="fr-fil fr-dib"></button>
+				<button aria-label="Show rear view" class="thumb" data-src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LRear.jpeg" role="listitem"><img src="https://admin.newparts.com/var/theme/images/ChevroletEquinox2.4LRear.jpeg" alt="Rear view thumbnail" loading="lazy" class="fr-fil fr-dib"></button>
+			</div>
+		</div>
+		<!-- [SECTION: GALLERY END] -->
+		<!-- Content -->
+		<article class="intro" itemprop="articleBody">
+
+			<h1 itemprop="headline">Chevrolet Equinox 2.4L Ecotec Platform Guide (2010&ndash;2017):&nbsp;</h1>
+
+			<p>The Chevrolet Equinox (2010-2017) 2.4L Ecotec is a utility vehicle that offers decent fuel economy while retaining its agile dimensions suitable for city traffic and expanded family use. Targeting a much broader swath of buyers, this generation of Equinox offers a more comfortable and roomier interior. Besides, it also comes with a design that combines sportiness with utility. It had decent if not too exciting driving dynamics, making it a good fit for a daily and long-haul driver. And its small size makes navigating tighter city spaces easier. The new Chevy Equinox also included comfortable seating and ample passenger/cargo volume for families. Also, it presented a decent option to shoppers considering family moves ranging from trips to the grocery store or a short vacation. The driving experience has been designed to be smooth and consistent, while the cabin is virtually silent, to make any trip on busy streets or highways more relaxing.&nbsp;</p>
+
+			<p>The Equinox car has many handy features that make driving and riding more convenient. The cabin is roomy, especially in the back seats, making it a favorite for families and others who frequently travel with passengers. The vehicle is also equipped with handy entertainment options and modern technology, making it perfect for long drives or road trips. However, over time, Chevrolet Equinox Ecotec will develop its common problems. So, in this guide, you get to know the specifications and the top 20 common issues with Chevy Equinox (2010-2017) 2.4L Ecotec. Don&rsquo;t worry! Even the solutions come easily. So, along with the common issues we also provide details on which parts must be replaced. And where can you get them? Just visit Newparts.com and solve all your Chevy problems.<span style="color: rgb(0, 0, 0);"><br></span></p>
+		</article>
+	</section>
+	<hr class="divider" aria-hidden="true">
+	<!-- ========= SPECIFICATIONS (Accordion on mobile) ========= -->
+	<!-- [SECTION: SPECIFICATIONS START] -->
+	<section aria-labelledby="specs-heading" class="specs" id="specifications">
+
+		<h2 id="specs-heading">Specifications&nbsp;</h2>
+		<!-- Block 1 -->
+		<div class="spec-block" data-acc="">
+			<div aria-expanded="false" class="spec-head" role="button" tabindex="0">
+
+				<h3>Engine and Powertrain</h3>
+				<button aria-hidden="true" class="spec-toggle" tabindex="-1" type="button"><span class="chev">⌄</span></button>
+			</div>
+			<div class="spec-body">
+
+				<dl class="spec-dl">
+					<dt>Engine:</dt>
+					<dd>2.4L Inline-4</dd>
+					<dt>Engine Code:</dt>
+					<dd>LEA&nbsp;</dd>
+					<dt>Horsepower:</dt>
+					<dd>182 hp @ 6,700 rpm</dd>
+					<dt>Torque:</dt>
+					<dd>~172 lb-ft @ 4,900 rpm</dd>
+					<dt>Fuel Type:</dt>
+					<dd>Gasoline</dd>
+					<dt>Transmission:</dt>
+					<dd>6-speed automatic transmission</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="spec-block" data-acc="">
+			<div aria-expanded="false" class="spec-head" role="button" tabindex="0">
+
+				<h3>Fuel Economy (EPA Estimates)</h3>
+				<button aria-hidden="true" class="spec-toggle" tabindex="-1" type="button"><span class="chev">⌄</span></button>
+			</div>
+			<div class="spec-body">
+
+				<dl class="spec-dl">
+					<dt>City/Highway Combined:</dt>
+					<dd>~21-28 MPG</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="spec-block" data-acc="">
+			<div aria-expanded="false" class="spec-head" role="button" tabindex="0">
+
+				<h3>Vehicle Weight</h3>
+				<button aria-hidden="true" class="spec-toggle" tabindex="-1" type="button"><span class="chev">⌄</span></button>
+			</div>
+			<div class="spec-body">
+
+				<dl class="spec-dl">
+					<dt>Curb Weight:</dt>
+					<dd>~3,758 lbs</dd>
+					<dt>Gross Weight:</dt>
+					<dd>~4,960 lbs</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="spec-block" data-acc="">
+			<div aria-expanded="false" class="spec-head" role="button" tabindex="0">
+
+				<h3>Configurations and Submodels</h3>
+				<button aria-hidden="true" class="spec-toggle" tabindex="-1" type="button"><span class="chev">⌄</span></button>
+			</div>
+			<div class="spec-body">
+
+				<dl class="spec-dl">
+					<dt>Body Styles:</dt>
+					<dd>SUV</dd>
+					<dt>Seating Capacity:</dt>
+					<dd>5-passenger</dd>
+					<dt>Drivetrain Options:</dt>
+					<dd>Front-Wheel Drive (FWD) and All-Wheel Drive (AWD)</dd>
+				</dl>
+			</div>
+		</div>
+	</section>
+	<!-- [SECTION: SPECIFICATIONS END] -->
+	<!-- ========= CATEGORY TABS / ISSUES ========= -->
+	<!-- [SECTION: ISSUES (CATEGORY BAR + PANELS) START] -->
+	<section aria-labelledby="issues-heading" class="tabs" id="issues">
+
+		<h2 id="issues-heading">Top Common Issues with Vehicle Platform Guide for Chevrolet Equinox 2010-2017 2.4L Ecotec: Top 20 Common Problems, Fault Codes, Solutions with Newparts</h2>
+		<div class="tabbar-wrap" id="tabbarWrap">
+			<div aria-label="Issue categories" class="tabbar" role="tablist">
+				<button aria-controls="panel-brakes" aria-selected="true" id="tab-brakes-btn" role="tab">Brakes</button>
+				<button aria-controls="panel-suspension" aria-selected="false" id="tab-suspension-btn" role="tab">Suspension</button>
+				<button aria-controls="panel-ignition" aria-selected="false" id="tab-ignition-btn" role="tab">Ignition</button>
+				<button aria-controls="panel-steering" aria-selected="false" id="tab-steering-btn" role="tab">Steering</button>
+				<button aria-controls="panel-engine" aria-selected="false" id="tab-engine-btn" role="tab">Engine</button>
+				<button aria-controls="panel-fuel-delivery" aria-selected="false" id="tab-fuel-delivery-btn" role="tab">Fuel Delivery</button>
+				<button aria-controls="panel-electrical-system" aria-selected="false" id="tab-electrical-system-btn" role="tab">Electrical System</button>
+				<button aria-controls="panel-driveline-transmission" aria-selected="false" id="tab-driveline-transmission-btn" role="tab">Driveline/Transmission</button>
+				<button aria-controls="panel-others" aria-selected="false" id="tab-others-btn" role="tab">Others</button>
+			</div>
+			<button aria-label="Next category" class="tab-next" title="Next" type="button">➜</button>
+			<!-- PATCH START: Mobile dropdown (auto-populated by JS; shown only on mobile) -->
+			<div aria-label="Choose category" class="cat-dropdown">
+				<label class="sr-only" for="catSelect">Choose category</label>
+				<select id="categorySelect">&nbsp;
+					<!-- Fallback options are fine; JS will rebuild -->
+					<option value="panel-brakes">Brakes</option>
+					<option value="panel-suspension">Suspension</option>
+					<option value="panel-ignition">Ignition</option>
+					<option value="panel-steering">Steering</option>
+					<option value="panel-engine">Engine</option>
+					<option value="panel-fuel-delivery">Fuel Delivery</option>
+					<option value="panel-electrical-system">Electrical System</option>
+					<option value="panel-driveline-transmission">Driveline/Transmission</option>
+					<option value="panel-others">Others</option> &nbsp;</select>
+			</div>
+			<!-- PATCH END -->
+		</div>
+		<!-- ======================== PASTE YOUR 23-ISSUES HTML BELOW ======================== -->
+		<!-- Panels -->
+		<div aria-hidden="false" aria-labelledby="tab-brakes-btn" class="tab-panel" id="panel-brakes" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/BoschBE1421H-DiscBrakePadSetFront.jpg" alt="Brake Pad " loading="lazy" class="fr-fil fr-dib" data-url="/images/content/BoschBE1421H-DiscBrakePadSetFront.jpg" data-size="25738" data-id="39" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Brake Pad&nbsp;</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Brake Pad Wear</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Brake pads gradually wear out due to friction with the brake rotors during normal braking. This natural wear-and-tear process reduces the thickness of the pads, leading to decreased braking efficiency and safety concerns if not addressed.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Squealing or Screeching Noise: When brake pads wear down, a high-pitched squealing or screeching noise often occurs when applying the brakes. This is usually caused by a wear indicator on the pad contacting the rotor.</li>
+							<li>Reduced Braking Performance: As the brake pads become thinner, they lose their ability to grip the rotors effectively, resulting in longer stopping distances and less responsive braking.</li>
+							<li>Brake Warning Light: A dashboard brake warning light may illuminate when the brake pad thickness becomes too low, signaling the need for replacement to maintain a safe braking function.</li>
+							<li>Vibration or Pulsation: If the brake pads are severely worn, you may feel vibrations or pulsation through the brake pedal, indicating uneven pad wear or a problem with the brake rotors.</li>
+							<li>Visual Inspection: Upon inspection, worn brake pads will appear thin, often less than 3mm in thickness. So, it means you need to replace the brake pad to maintain braking efficiency and safety.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/bosch/BE1421H">Bosch Disc Brake Pad Set Front BE1421H</a> : The Bosch BE1421H front brake pads are designed for reliable performance and long-lasting braking efficiency. Made with high-quality materials, these pads offer smooth and quiet braking for enhanced driving comfort.</li>
+							<li><a href="https://newparts.com/product/bosch/BC1275">Bosch Disc Brake Pad Set &ndash; Rear (Ceramic) BC1275</a></li>
+							<li><a href="https://newparts.com/product/akebono-proact/ACT924">Akebono ProACT Disc Brake Pad Set Front ACT924</a> : Akebono&#39;s ACT924 front brake pads feature advanced ceramic technology for consistent braking performance. Known for their low dust and quiet operation, they offer a smooth and reliable driving experience.</li>
+							<li><a href="https://newparts.com/product/akebono-proact/ACT1275">Akebono ProACT Disc Brake Pad Set &ndash; Rear (Ceramic) ACT1275</a></li>
+							<li><a href="https://newparts.com/product/trw/TRC1421">TRW Disc Brake Pad Set Front (Ceramic) TRC1421</a> : TRW&#39;s TRC1421 ceramic front brake pads provide excellent braking power with reduced noise and vibration. Their high-performance design ensures consistent stopping performance and longevity.</li>
+							<li><a href="https://newparts.com/product/trw/TRC1275">TRW Disc Brake Pad Set &ndash; Rear (Ceramic) (Pro)TRC1275</a></li>
+							<li><a href="https://newparts.com/product/acdelco/17D1421CHF1">ACDelco Disc Brake Pad Set (Front) 17D1421CHF1</a> : ACDelco&rsquo;s 17D1421CHF1 front brake pads are designed to provide reliable braking performance with enhanced durability. Made with high-quality materials, these pads reduce noise and vibration, offering consistent stopping power.</li>
+							<li><a href="https://newparts.com/product/acdelco/17D1275CHF1">ACDelco Disc Brake Pad Set (Rear) 17D1275CHF1</a> : The ACDelco 17D1275CHF1 rear brake pads are engineered for long-lasting performance and quiet operation. Their durable construction provides dependable braking, reducing dust and ensuring smooth, consistent stops.</li>
+							<li><a href="https://newparts.com/product/advics/AD1421">Advics Disc Brake Pad Set Front (Ceramic) AD1421</a> : The Advics AD1421 ceramic front brake pads are designed for improved braking performance with minimal noise and dust. Their advanced construction ensures long-term durability and efficient braking in all driving conditions.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<p>
+							<a href="https://eeuroparts.com/ACDelco"></a>
+						</p>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/acdelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/bosch">Bosch</a></li>
+							<li><a href="https://newparts.com/trw">TRW</a></li>
+							<li><a href="https://newparts.com/akebono">Akebono</a></li>
+							<li><a href="https://newparts.com/2010/chevrolet/equinox/ls-2-4-l4-gas-/advics">Advics</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/Bosch25011437-DiscBrakeRotorFront.jpg" alt="Brake Rotors" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/Bosch25011437-DiscBrakeRotorFront.jpg" data-size="17515" data-id="40" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Brake Rotors</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>2.&nbsp;</strong>Warped Brake Rotors</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Excessive heat from heavy or frequent braking can cause rotors to warp, especially if followed by rapid cooling (e.g., driving through water). This creates an uneven rotor surface, affecting braking smoothness and effectiveness.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Brake Pedal Pulsation: When braking, a pulsating or jerking sensation can be felt in the brake pedal due to the uneven rotor surface.</li>
+							<li>Steering Wheel Vibration: The steering wheel may shake or vibrate when braking, indicating uneven contact between the brake pads and rotors.</li>
+							<li>Uneven Brake Pad Wear: Brake pads may wear irregularly due to inconsistent rotor surfaces. This leads to reduced braking efficiency.</li>
+							<li>Squeaking or Grinding Noises: Warped rotors can cause squealing, squeaking, or grinding noises during braking, signaling an uneven rotor surface.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/bosch/25011437">Bosch Buick Chevrolet GMC Disc Brake Rotor Front 25011437</a> : This front brake rotor offers smooth, consistent braking performance and durability to handle daily driving demands.</li>
+							<li><a href="https://newparts.com/product/bosch/25011463">Bosch Buick Chevrolet GMC Disc Brake Rotor Rear 25011463</a> : Designed for rear braking, this Bosch rotor provides reliable stopping power, high thermal resistance, and reduced brake noise.</li>
+							<li><a href="https://newparts.com/product/bison-performance/BPBD04004X">Bison Performance Disc Brake Rotor Front BPBD04004X</a> : Bison&#39;s BPBD04004X front performance rotor enhances braking responsiveness and heat dissipation. So, this is ideal for demanding driving conditions requiring strong, consistent braking.</li>
+							<li><a href="https://newparts.com/product/bison-performance/BPBD06004">Bison Performance Disc Brake Rotor BPBD06004</a> : This performance brake rotor from Bison is designed for high performance, providing enhanced heat management and durability to withstand intense braking.</li>
+							<li><a href="https://newparts.com/product/acdelco/18A2719A">ACDelco Disc Brake Rotor (Front) 18A2719A</a> : The ACDelco 18A2719A front rotor is engineered for smooth, quiet braking with precision machining to prevent vibrations and ensure even pad wear.</li>
+							<li><a href="https://newparts.com/product/acdelco/18A2727">ACDelco Disc Brake Rotor Rear 18A2727</a> : This ACDelco rear rotor delivers dependable braking power and heat dissipation, designed to fit GM models and ensure balanced, reliable braking performance.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/23118055">Genuine Chevrolet Disc Brake Rotor &ndash; Front 23118055</a></li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/20792027">Genuine Chevrolet Disc Brake Rotor Rear 20792027</a> : This rear rotor, made by Genuine Chevrolet, provides OEM-quality braking performance and reliability, engineered to fit Chevrolet vehicles perfectly.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/acdelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/bosch">Bosch</a></li>
+							<li><a href="https://newparts.com/genuine-chevrolet">Genuine Chevrolet</a></li>
+							<li><a href="https://newparts.com/bison-performance">Bison Performance</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco174-1217-BrakeMasterCylinder.jpg" alt="Brake Master Cylinder" loading="lazy" class="fr-fil fr-dib" data-size="20581" data-width="600" data-message="File was successfully uploaded" data-height="400" data-url="/images/content/ACDelco174-1217-BrakeMasterCylinder.jpg" data-id="42">
+						<figcaption>Brake Master Cylinder</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>3.&nbsp;</strong>Brake Master Cylinder Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>The brake master cylinder can fail due to internal seal wear, contamination of the brake fluid, or excessive heat causing damage to components. Over time, the seals may degrade or develop leaks. So, this reduces the hydraulic pressure required for proper braking.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Spongy or Soft Brake Pedal: A spongy or soft brake pedal indicates a loss of hydraulic pressure, caused by air in the brake lines or a failing master cylinder. This lack of pressure reduces the effectiveness of the braking system. Drivers may notice the pedal feels less responsive and requires more effort to stop the vehicle.</li>
+							<li>Brake Fluid Leaks: Visible brake fluid near the master cylinder or under the vehicle suggests a fluid leak, which can result from a damaged cylinder or brake line. Leaking fluid reduces the hydraulic pressure in the braking system, leading to decreased braking performance.</li>
+							<li>Reduced Braking Performance: If the master cylinder is failing, the vehicle may take longer to stop due to insufficient hydraulic pressure. This can make it harder to stop the vehicle in emergencies, posing a serious safety risk. Reduced braking performance can also be caused by fluid leaks or internal damage within the cylinder.</li>
+							<li>Brake Warning Light: A failing master cylinder can trigger the brake system warning light, alerting the driver to issues with the braking system. This light may turn on due to low brake fluid levels or loss of pressure, both of which indicate a need for immediate inspection and repair.</li>
+							<li>Pedal Sinks to the Floor: When the brake pedal slowly sinks to the floor when pressed, it indicates internal leakage within the master cylinder. This issue reduces the brake system&#39;s ability to build pressure, making it harder to stop the vehicle effectively.</li>
+							<li>Uneven Braking: Faulty pressure distribution from a failing master cylinder can cause inconsistent braking performance, where the vehicle may pull to one side or have uneven stopping power. This is due to imbalanced pressure being applied to the brake calipers or wheel cylinders.</li>
+							<li>Contaminated Brake Fluid: Dirt, moisture, or other contaminants in the brake fluid can damage the master cylinder and reduce its effectiveness. Contaminated fluid can lead to corrosion inside the cylinder and cause it to fail. This can significantly compromise the braking system&rsquo;s ability to function safely and efficiently.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/1741217">ACDelco Brake Master Cylinder 174-1217</a> : The ACDelco 174-1217 Brake Master Cylinder is a high-quality OEM replacement part designed to restore the proper function of your vehicle&rsquo;s braking system. It ensures optimal hydraulic pressure for smooth and reliable braking performance, enhancing safety and control. Built with durable materials, it resists wear, corrosion, and fluid contamination for long-lasting durability. This master cylinder is engineered to meet factory specifications, making it a reliable choice for maintaining your vehicle&#39;s braking efficiency.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/acdelco">ACDelco</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco178-0872-PowerBrakeBooster.jpg" alt="Brake Booster" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco178-0872-PowerBrakeBooster.jpg" data-size="20716" data-id="43" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Brake Booster</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>4.&nbsp;</strong>Brake Booster Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Over time, the vacuum brake booster can fail due to internal diaphragm damage or vacuum leaks, which compromises the power assistance that helps in effective braking. So, it requires more force from the driver to stop the vehicle.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Hard Brake Pedal: The brake pedal feels stiff and requires more force to press, indicating a loss of power assistance from the booster.</li>
+							<li>Hissing Noise: A hissing sound when the brake pedal is pressed suggests a vacuum leak in the booster, as air escapes from the system.</li>
+							<li>Engine Stalling: When the brakes are applied, a vacuum leak can disrupt engine performance, causing the engine to stall.</li>
+							<li>Longer Stopping Distance: Reduced braking power increases the distance required to bring the vehicle to a complete stop, impacting safety.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/1780872">ACDelcol Power Brake Booster 178-0872</a> : This ACDelco power brake booster provides factory-quality assistance, designed to restore proper braking performance and pedal feel.
+								<a href="http://acdelco"></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-suspension-btn" class="tab-panel" id="panel-suspension" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/Sachs316887-SuspensionShockAbsorberRear.jpg" alt="Suspension Shock Absorber" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/Sachs316887-SuspensionShockAbsorberRear.jpg" data-size="15898" data-id="72" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Suspension Shock Absorber</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Suspension Shock Absorber Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Over time, the internal seals inside the shock absorber wear out. The hydraulic fluid leaks or foams, and the shock loses its ability to control spring movement. Rough roads, potholes, towing, or simply higher mileage accelerate this wear. Corrosion on the shock body and damaged dust boots can also allow dirt in, breaking down the internal components.</p>
+						<div class="issue-block">
+
+							<h4><u>Symptoms:</u></h4>
+
+							<ul class="symptom-list">
+								<li>Bouncy or unstable ride: The vehicle keeps oscillating after bumps instead of settling.</li>
+								<li>Clunking or knocking noises: Especially noticeable on rough roads or speed bumps.</li>
+								<li>Nose dives during braking: Front end dips excessively when stopping.</li>
+								<li>Uneven tire wear: &ldquo;Cupping&rdquo; or scalloped tire tread due to poor damping.</li>
+								<li>Poor cornering stability: Vehicle leans more in turns and feels less confident.</li>
+								<li>Increased stopping distance: Reduced tire contact due to bouncing.</li>
+								<li>Fluid leakage on shock body: Visible oily residue around the shock housing.</li>
+								<li>Rattling over small bumps: Internal valving becomes loose when worn.</li>
+							</ul>
+						</div>
+						<div class="issue-block">
+
+							<h4><u>Parts to Replace</u></h4>
+
+							<ul class="parts-list">
+								<li><a href="https://newparts.com/suspension/shocks-struts/sachs-316-887-suspension-shock-absorber-rear">Sachs 316 887</a> - Suspension Shock Absorber (Rear) ensures balanced handling and even braking stability.</li>
+								<li><a href="https://newparts.com/suspension/shocks-struts/sachs-316-593-suspension-strut-front-right">Sachs 316 593</a> - Suspension Strut (Front Right).</li>
+								<li><a href="https://newparts.com/suspension/shocks-struts/acdelco-22807232-suspension-strut-mount-front">ACDelco 22807232</a> - Suspension Strut Mount (Front).</li>
+								<li><a href="https://newparts.com/suspension/suspension-bushings/mevotech-ms504336-suspension-knuckle-bushing-rear-upper">Mevotech MS504336</a> - Suspension Knuckle Bushing (Rear Upper)</li>
+							</ul>
+						</div>
+						<div class="issue-block">
+
+							<h4><u>Brands</u></h4>
+
+							<ul class="brand-list">
+								<li><a href="https://newparts.com/Sachs">Sachs</a></li>
+								<li><a href="https://newparts.com/ACdelco">ACdelco</a></li>
+								<li><a href="https://newparts.com/Mevotech">Mevotech</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-ignition-btn" class="tab-panel" id="panel-ignition" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco41-108-SparkPlug.jpg" alt="Engine Misfire" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco41-108-SparkPlug.jpg" data-size="24466" data-id="73" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Engine Misfire</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Engine Misfire</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0301: Cylinder 1 Misfire Detected, P0302: Cylinder 2 Misfire Detected,P0303: Cylinder 3 Misfire Detected, P0304: Cylinder 4 Misfire Detected.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>A misfire in the engine can be caused by failing ignition components like spark plugs or ignition coils, or issues with fuel injectors. These components play a critical role in the combustion process, and their failure leads to improper fuel-air mixture and incomplete combustion.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Rough Idling: A misfiring engine can cause it to idle unevenly, with shaking or vibrations when at a stop. This occurs due to incomplete combustion in one or more cylinders.</li>
+							<li>Loss of Power: Misfires can lead to a loss of power when accelerating. This happens because the engine is not firing on all cylinders or is receiving an incorrect fuel mixture, resulting in reduced performance.</li>
+							<li>Poor Fuel Economy: When combustion is inefficient due to misfires, the engine burns more fuel than necessary. This results in poor fuel economy as the engine struggles to generate power with an improper air-fuel mixture.</li>
+							<li>Engine Vibration: Misfires can cause the engine to vibrate or jerk, during acceleration. This happens because of inconsistent firing across the cylinders, which affects the engine&rsquo;s smooth operation.</li>
+							<li>Check Engine Light Illuminated: A misfire often triggers the check engine light, and codes such as P0300 (Random/Multiple Cylinder Misfire Detected) may be stored. This serves as an indication that one or more cylinders are not functioning properly.</li>
+							<li>Exhaust Smoke: Incomplete combustion due to misfiring may cause black smoke to emanate from the exhaust. This occurs because unburned fuel enters the exhaust system and is expelled as visible smoke.</li>
+							<li>Difficulty Starting: A misfiring engine can cause hard starts or stalling shortly after ignition. If the spark plugs or fuel injectors aren&rsquo;t functioning properly, the engine may struggle to start.</li>
+							<li>Backfiring: Misfires may cause backfiring, where unburned fuel ignites in the exhaust or intake system. This leads to popping sounds. It occurs due to incomplete combustion, causing the fuel to ignite outside the combustion chamber.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/41108">ACDelco Spark plugs 14108</a> : ACDelco Spark Plugs 14108 are designed for high performance and durability, providing consistent ignition for smoother engine operation. As OEM parts, they ensure reliable spark and efficient fuel combustion for Chevrolet vehicles.</li>
+							<li><a href="https://newparts.com/product/ngk/LTR5AHX">NGK Spark plugs LTR5AHX</a> : NGK Spark Plugs LTR5AHX offer excellent durability and performance with advanced materials, ensuring efficient ignition and optimal engine performance. These plugs are engineered for reliability, reducing misfires and improving fuel efficiency.</li>
+							<li><a href="https://newparts.com/product/bosch/9723">Bosch Spark Plug 9723</a> : Bosch Spark Plug 9723 is designed with a long lifespan and advanced technology to ensure reliable ignition. It helps reduce engine misfires and promotes better fuel efficiency, ideal for modern high-performance engines.</li>
+							<li><a href="https://newparts.com/product/denso/4718">Danso Spark Plug 4718</a> : Danso Spark Plug 4718 offers dependable performance, improving ignition efficiency and reducing engine misfires. It is engineered for long-lasting performance and optimal combustion.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12681658">Genuine Chevrolet Spark Plug 12681658</a> : Genuine Chevrolet Spark Plug 12681658 is an OEM replacement part, designed for Chevrolet engines to deliver precise ignition and ensure smooth engine operation. It is built to meet the manufacturer&rsquo;s standards for performance and reliability.</li>
+							<li><a href="https://newparts.com/product/acdelco/D522C">ACDelco- ignition coils D522C</a> ACDelco Ignition Coils D522C deliver strong, reliable sparks for optimal combustion. Designed to meet OEM specifications, they improve engine performance and fuel efficiency by providing consistent ignition in all conditions.</li>
+							<li><a href="https://newparts.com/product/hitachi/IGC4059HU">Hitachi Ignition Coil IGC4059</a> : Hitachi Ignition Coil IGC4059 is a high-quality replacement part, designed to ensure precise spark delivery for efficient engine performance. It provides excellent ignition strength and long-term durability.</li>
+							<li><a href="https://newparts.com/product/hella/358000121">Hella Ignition Coil 358000121</a> : Hella Ignition Coil 358000121 is engineered for high efficiency and durability, ensuring strong and reliable ignition. It meets OEM standards and helps optimize fuel efficiency and reduce misfires.</li>
+							<li><a href="https://newparts.com/product/ngk/U5180">NGK Ignition Coil U5180</a> : NGK Ignition Coil U5180 is designed to provide strong and consistent ignition. With high-quality construction, it helps improve fuel efficiency and reduce the risk of misfires and other ignition issues.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/NGK">NGK</a></li>
+							<li><a href="https://newparts.com/Bosch">Bosch</a></li>
+							<li><a href="https://newparts.com/Hitachi">Hitachi</a></li>
+							<li><a href="https://newparts.com/Danso">Danso</a></li>
+							<li><a href="https://newparts.com/Hella">Hella</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-steering-btn" class="tab-panel" id="panel-steering" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/Hitachi4063354-PowerSteeringPumpKit.jpg" alt="Power Steering Pump" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/Hitachi4063354-PowerSteeringPumpKit.jpg" data-size="23148" data-id="77" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Power Steering Pump</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Power Steering Pump Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>You may see codes such as P0550, P0551, P0552, or P0553, which point to power steering pressure sensor or system performance issues. Some vehicles may also log steering-assist-related chassis codes depending on scan tool capability.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Over time, the power steering pump simply wears out from constant load. Heat, old or contaminated power steering fluid, and small internal leaks gradually damage the pump&rsquo;s internal vanes and bearings.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Heavy Steering Feel: Steering wheel becomes noticeably harder to turn, especially at low speeds or during parking.</li>
+							<li>Whining / Groaning Noise: A high-pitched whine or growl from the engine bay that changes with steering movement.</li>
+							<li>Jerky or Intermittent Assist: Steering may feel smooth sometimes, then suddenly stiff or choppy.</li>
+							<li>Fluid Leaks: Red or amber oily spots under the front of the vehicle from power steering lines or the pump itself.</li>
+							<li>Burnt Fluid Smell: Dark, discolored fluid with a burnt odor inside the reservoir.</li>
+							<li>Warning Message (Some models): Steering assist warning or service message may appear in the instrument cluster.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/steering/power-steering-pumps/hitachi-4063354-power-steering-pump-kit">Hitachi 4063354</a> - Power Steering Pump Kit Direct-fit replacement designed to restore proper steering assist pressure and quiet operation.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/Hitachi">Hitachi</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-engine-btn" class="tab-panel" id="panel-engine" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/SealedPowerE-1024KC-EnginePistonRingSet.jpg" alt="Oil Consumption Issues" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/SealedPowerE-1024KC-EnginePistonRingSet.jpg" data-size="26511" data-id="74" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Oil Consumption Issues</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Oil Consumption Issues</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Excessive oil consumption results from worn piston rings or valve seals that allow oil to leak into the combustion chamber. Over time, engine components experience wear and tear, leading to increased oil seepage. This issue not only depletes oil levels but also affects engine efficiency and performance.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Frequent Need to Add Oil: Having to top off oil more often than usual signals excessive oil consumption, which can be due to worn piston rings or valve seals. This leads to oil loss, impacting engine lubrication.</li>
+							<li>Low Oil Levels: Consistently low oil readings on the dipstick despite regular maintenance suggest oil is either leaking or burning. This issue can cause poor lubrication and increased engine wear.</li>
+							<li>Blue Smoke from Exhaust: Blue or bluish-gray smoke from the exhaust is a clear sign that oil is burning in the combustion chamber. This often results from worn engine components allowing oil to seep into the combustion process.</li>
+							<li>Fouled Spark Plugs: Oil deposits on spark plugs can cause misfires, rough idling, and poor engine performance. Oil entering the combustion chamber coats the plugs, disrupting ignition.</li>
+							<li>Oil Leaks: Visible oil spots under the vehicle or on engine parts indicate oil is leaking externally. These leaks contribute to frequent oil loss and may suggest issues with gaskets or seals.</li>
+							<li>Decreased Fuel Efficiency: As the engine compensates for the lack of lubrication due to oil loss, it has to work harder, resulting in reduced fuel economy and overall efficiency.</li>
+							<li>Oil Pressure Warning Light: A low oil pressure warning light on the dashboard is often triggered by insufficient oil levels. This in turn can lead to engine damage if not addressed promptly.</li>
+							<li>Engine Knocking or Noise: Lack of adequate lubrication due to low oil levels can cause metal components to rub together, resulting in knocking or other noises, which may indicate potential engine damage.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12665165">Genuine Chevrolet piston rings12665165</a> : These OEM piston rings are engineered to provide a reliable seal between the piston and cylinder wall. This provides proper compression and minimizes oil leakage. Designed specifically for Chevrolet engines, they help maintain efficient combustion and prevent excessive oil consumption.</li>
+							<li><a href="https://newparts.com/product/acdelco/2173399">Fuel Injector seal 217-3399</a> : These high-quality ACDelco fuel injector seals ensure a tight fit for fuel injectors, preventing fuel leaks and maintaining optimal fuel pressure. They are durable and help improve fuel efficiency by ensuring the injectors function properly.</li>
+							<li><a href="https://newparts.com/product/gb/8068">GB Fuel Injector Seal Kit 8-068</a> : This GB seal kit provides a complete set of seals for fuel injectors, offering reliable protection against fuel and air leaks. It&rsquo;s designed to ensure injector stability and enhance fuel system performance, prolonging injector life.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12591092">Genuine Chevrolet Engine Crankshaft Main Bearing 12591092</a> : This Chevrolet OEM crankshaft main bearing offers reliable support for the crankshaft, reducing friction and wear. Designed for durability, it ensures smooth engine operation and helps maintain proper engine balance and efficiency.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+							<li><a href="https://newparts.com/GB">GB</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/Denso234-4242-OxygenSensorUpstream.jpg" alt="Oxygen Sensor" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/Denso234-4242-OxygenSensorUpstream.jpg" data-size="21467" data-id="78" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Oxygen Sensor</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>2.&nbsp;</strong>Oxygen Sensor Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0131 (O2 Sensor Low Voltage). This fault code indicates low voltage in the oxygen (O₂) sensor.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>A failed oxygen sensor can cause incorrect readings of the air-fuel mixture, leading the engine control unit (ECU) to adjust fuel delivery improperly. This often results from sensor wear or exposure to contaminants over time.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Illuminated Check Engine Light: The check engine light is illuminated when there&rsquo;s a fault code related to the oxygen sensor, alerting the driver to potential sensor issues.</li>
+							<li>Poor Fuel Economy: Faulty oxygen sensors can mislead the ECU about the fuel-air ratio, causing the engine to burn more fuel than necessary. This results in decreased fuel efficiency.</li>
+							<li>Rough Idle and Misfires: An incorrect air-fuel mixture due to a malfunctioning sensor can lead to rough idling and even engine misfires, especially at low speeds.</li>
+							<li>Engine Hesitation or Stalling: A bad oxygen sensor can cause erratic air-fuel adjustments, leading to hesitation during acceleration or unexpected stalling, affecting the driving.</li>
+							<li>Increased Emissions: Faulty oxygen sensors lead to inefficient combustion, increasing harmful emissions. So the Equinox vehicle fails the emissions test.</li>
+							<li>Sulfur or &quot;Rotten Egg&quot; Smell from Exhaust: Excess fuel can cause a sulfuric smell in the exhaust. This indicates an issue with fuel mixture and combustion, linked to a bad sensor.</li>
+							<li>Black Smoke from Exhaust: Due to the presence of the unburned fuel black smoke comes through the exhaust. So, this signals the failure of the oxygen sensor.</li>
+							<li>Loss of Power: The engine may feel sluggish or less responsive due to improper air-fuel adjustments. So, this reduces the overall performance.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/2134537">ACDelco-Oxygen Sensor &ndash; Upstream 213-4537</a></li>
+							<li><a href="https://newparts.com/product/bosch/15151">Bosch Oxygen Sensor Downstream 15151</a> : This Bosch downstream sensor is designed to monitor exhaust gas composition post-catalytic converter. It ensures compliance with emission standards by verifying the catalytic converter function.</li>
+							<li><a href="https://newparts.com/emission/oxygen-sensors/ntk-21558-oxygen-sensor">NTK oxygen sensors Upstream 21558:</a> NTK&#39;s upstream sensor accurately monitors oxygen content before the catalytic converter, ensuring optimal fuel mixture. It contributes to improved engine efficiency and lower emissions.</li>
+							<li><a href="https://newparts.com/emission/oxygen-sensors/ntk-21064-oxygen-sensor">NTK oxygen sensors Downstream 21064</a> : This NTK downstream sensor provides post-catalytic data to the ECU Engine Control Unit, confirming catalytic efficiency. It helps maintain emission standards and contributes to cleaner exhaust output.</li>
+							<li><a href="https://newparts.com/emission/oxygen-sensors/denso-234-4242-oxygen-sensor-upstream">Denso Oxygen Sensor Upstream 234-4242</a> : Denso&rsquo;s upstream sensor optimizes fuel mixture by monitoring oxygen levels in the exhaust pre-catalytic converter. Known for reliability, it aids in maintaining fuel efficiency and performance.</li>
+							<li><a href="https://newparts.com/emission/oxygen-sensors/denso-234-4251-oxygen-sensor-downstream">Denso Oxygen Sensor Downstream 234-4251</a> : Denso&rsquo;s downstream sensor verifies catalytic converter operation by analyzing exhaust gases. It plays a key role in emission control and maintaining regulatory standards.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/Bosch">Bosch</a></li>
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/NTK">NTK</a></li>
+							<li><a href="https://newparts.com/Danso">Danso</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/NTKMG0009-MassAirFlowSensor.jpg" alt="Mass Air Flow (MAF) Sensor" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/NTKMG0009-MassAirFlowSensor.jpg" data-size="24156" data-id="79" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Mass Air Flow (MAF) Sensor</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>3.&nbsp;</strong>Mass Air Flow (MAF) Sensor Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0101 (MAF Circuit Range/Performance)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>MAF sensors can get dirty or wear out over time. So, you get incorrect air-fuel mixture readings.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Illuminated Check Engine Light: When the mass airflow (MAF) sensor malfunctions, it often triggers the check engine light, alerting the driver to an issue. Fault codes like P0101 indicate that the MAF sensor is providing inaccurate readings, causing the engine control unit (ECU) to adjust improperly.</li>
+							<li>Poor Fuel Economy: A faulty MAF sensor can send incorrect air intake readings to the ECU, resulting in an overly rich fuel mixture. This causes the engine to burn more fuel than necessary, leading to decreased fuel efficiency and increased fuel costs over time.</li>
+							<li>Rough Idling or Stalling: When the air-fuel mixture is off balance due to a malfunctioning MAF sensor, the engine may idle roughly, struggling to maintain a steady RPM. This imbalance can also cause the engine to stall, especially when coming to a stop.</li>
+							<li>Engine Hesitation or Jerking: Acceleration may feel sluggish, jerky, or hesitant as the engine receives improper air-to-fuel ratios. This can make driving feel less responsive, especially during rapid acceleration or when climbing inclines.</li>
+							<li>Difficulty Starting: Starting the engine, particularly in cold weather, can be challenging when the MAF sensor is not functioning correctly. The ECU may struggle to adjust the air-fuel mixture for optimal ignition, leading to longer cranking times or multiple attempts to start.</li>
+							<li>Black Exhaust Smoke: A faulty MAF sensor can cause an overly rich fuel mixture, which leads to incomplete combustion. This produces black smoke from the exhaust, a telltale sign of excess fuel and poor engine efficiency.</li>
+							<li>Reduced Power: When the MAF sensor fails to provide accurate air intake data, the engine may lack power or feel sluggish. This reduced performance is due to improper fuel mixture, preventing the engine from reaching its full potential.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/emission/maf-sensors/hitachi-maf0034-mass-air-flow-sensor">Hitachi MAF sensor MAF0034</a> : The Hitachi MAF0034 is a highly reliable mass airflow sensor designed to measure the amount of air entering the engine accurately. Built to OEM standards, it&rsquo;s compatible with a wide range of vehicles and is durable.</li>
+							<li><a href="https://newparts.com/emission/maf-sensors/ntk-mg0009-mass-air-flow-sensor">NTK Mass Air Flow Sensor MG0009</a> : The NTK MG0079 mass airflow sensor features advanced technology for fast and accurate air measurement.NTK is a trusted brand in sensor technology, known for producing durable and high-performing sensors.</li>
+							<li><a href="https://newparts.com/emission/maf-sensors/genuine-chevrolet-15865791-mass-air-flow-sensor">Genuine Chevrolet Mass Air Flow Sensor 15865791</a> : This Genuine Chevrolet MAF sensor (part number 15865791) is an OEM replacement specifically tailored for Chevrolet vehicles.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/Hitachi">Hitachi</a></li>
+							<li><a href="https://newparts.com/NTK">NTK</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco55563529-EngineIntakeValve.jpg" alt="Intake Valves" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco55563529-EngineIntakeValve.jpg" data-size="12678" data-id="80" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Intake Valves</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>4.&nbsp;</strong>Excessive Carbon Buildup on Intake Valves</h4>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>In direct injection engines, fuel is sprayed directly into the cylinders, bypassing the intake valves. This means the valves don&#39;t get washed by the fuel, allowing carbon to accumulate over time.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Rough Idling: When airflow is restricted, the engine may idle unevenly or produce unusual vibrations. This can feel like the engine is shaking at a stop.</li>
+							<li>Engine Misfires: Misfires occur when combustion doesn&rsquo;t fully happen in one or more cylinders, often due to a poor air-fuel mix. So, this leads to a stuttering sensation.</li>
+							<li>Reduced Acceleration: Restricted airflow makes the engine work harder to produce power, resulting in slow or delayed acceleration and a lack of responsiveness.</li>
+							<li>Decreased Fuel Efficiency: The engine burns more fuel to compensate for the poor airflow, lowering miles per gallon and increasing overall fuel costs.</li>
+							<li>Difficulty Starting: Buildup in the intake or on the valves makes it harder for air to flow into the engine, leading to a rough or slow start.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/55563529">ACDelco- intake valves 55563529</a> : This intake valve from ACDelco helps control the flow of air into the combustion chamber, supporting better combustion and engine performance.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/55563529">Genuine Chevrolet Engine Intake Valve 55563529</a> : Built for Chevrolet engines, this intake valve promotes smoother airflow and prevents leaks. Thus it reduces misfires and improves efficiency.</li>
+							<li><a href="https://newparts.com/product/acdelco/12637620">ACDelco- Intake manifold-12637620</a> : This intake manifold from ACDelco ensures optimal airflow to the engine, helping maintain smooth performance and efficient combustion.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12637620">Genuine Chevrolet Engine Intake Manifold 12637620</a> : Specifically designed for Chevrolet engines, this manifold provides reliable airflow distribution. Thus it improves the power and fuel efficiency.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelcoD1849A-EngineOilPressureSwitch.jpg" alt="Oil Pressure Switch" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelcoD1849A-EngineOilPressureSwitch.jpg" data-size="7617" data-id="81" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Oil Pressure Switch</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>5.&nbsp;</strong>High Oil Pressure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P06DD (Engine Oil Pressure Control Circuit Stuck Off)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>The oil pressure control valve can fail, leading to higher-than-normal oil pressure.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Using Incorrect Oil Viscosity: When the oil is too thick (high viscosity), especially in cold weather, it resists flowing easily through the engine. This causes the oil pump to work harder, leading to excessive oil pressure and causing damage to engine components.</li>
+							<li>Clogged or Dirty Oil Filter: A blocked oil filter restricts the flow of clean oil to critical engine parts. This results in reduced lubrication and increased pressure within the oil system.</li>
+							<li>Faulty Oil Pressure Relief Valve: If the oil pressure relief valve gets stuck in the closed position or malfunctions, it cannot regulate the oil pressure. This causes the pressure to rise beyond safe levels, risking engine damage.</li>
+							<li>Blocked Oil Passages: Over time, sludge or debris can build up in the oil passages, preventing oil from flowing freely. This blockage increases pressure throughout the system. So, this reduces lubrication efficiency and causes engine overheating or wear.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/D1849A">ACDelco-Oil Pressure Switch-D1849A</a> : ACDelco&rsquo;s oil pressure switch is designed to monitor the oil pressure in the engine, triggering a warning light when pressure is too low. It ensures that the engine&rsquo;s lubrication system is functioning properly and protects against low oil pressure damage.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12635992">Genuine Chevrolet Engine Oil Pressure Switch 12635992</a> This OEM oil pressure switch from Chevrolet provides accurate oil pressure readings and helps maintain proper engine performance. It is specifically designed for use in Chevrolet vehicles.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12637040">Genuine Chevrolet Engine Timing Cover 12637040</a> : This OEM timing cover from Chevrolet is designed to protect the timing components and ensure proper sealing to prevent oil leaks. It fits specific Chevrolet engines and ensures long-lasting performance and protection.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/DNJ">DNJ</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco213-4333-EngineOilTemperatureSender.jpg" alt="Engine Oil Temperature Sender" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco213-4333-EngineOilTemperatureSender.jpg" data-size="10970" data-id="82" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Engine Oil Temperature Sender</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>6.&nbsp;</strong>Coolant Temperature Sensor Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0128, P0115-P0119 (Coolant Temperature Below Thermostat Regulating Temperature)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>These codes indicate that the engine coolant temperature is not reaching or maintaining the appropriate level. This can be caused by a malfunctioning coolant temperature sensor or thermostat. This leads to incorrect temperature readings to the engine control unit (ECU).</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Erratic Temperature Gauge Readings: The dashboard temperature gauge may fluctuate or show incorrect values due to faulty sensor readings. So, it becomes difficult to accurately monitor the engine temperature.</li>
+							<li>Poor Fuel Economy: If the coolant temperature is inaccurately reported, the engine may run too rich or lean, affecting the air-fuel mixture and causing reduced fuel efficiency.</li>
+							<li>Engine Overheating: If the coolant temperature sensor fails, the engine may not trigger the cooling fans. So, the engine gets overheated as the cooling system fails to operate at the correct time.</li>
+							<li>Black Smoke from Exhaust: A faulty sensor can cause an overly rich fuel mixture, with too much fuel and not enough air. This results in black smoke from the exhaust due to incomplete combustion.</li>
+							<li>Hard Starting Conditions: Incorrect coolant temperature readings can confuse the engine&rsquo;s fuel system, especially in cold conditions. So, the engine does not receive the appropriate amount of fuel.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/2134333">ACDelco-Coolant temperature sensor-213-4333</a> : This ACDelco sensor accurately measures the engine&rsquo;s coolant temperature, providing vital data to the engine control unit (ECU) for optimal performance and efficient fuel economy.</li>
+							<li><a href="https://newparts.com/product/ntk/EF0075">NTK Engine Coolant Temperature Sensor EF0075</a> : NTK&#39;s sensor delivers precise coolant temperature readings, helping the engine maintain the proper operating temperature. It ensures smooth engine performance by regulating fuel mixture and ignition timing.</li>
+							<li><a href="https://newparts.com/product/hella/009107271">Hella Engine Coolant Temperature Sensor 009107271</a> : Hella&rsquo;s coolant temperature sensor provides accurate monitoring of engine temperature. So, it prevents overheating and optimizes fuel efficiency.</li>
+							<li><a href="https://newparts.com/product/bosch/0280130014">Bosch Engine Coolant Temperature Sensor 0280130014</a> : Bosch&#39;s sensor offers precise temperature readings to maintain engine efficiency and prevent overheating. It&rsquo;s designed for fast and accurate response, improving fuel management and reducing emissions.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12608814">Genuine Chevrolet Engine Coolant Temperature Sensor 12608814</a> : This OEM sensor from Chevrolet is specifically engineered for use in Chevrolet vehicles, providing accurate coolant temperature data for optimal engine performance.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Bosch">Bosch</a></li>
+							<li><a href="https://newparts.com/NTK">NTK</a></li>
+							<li><a href="https://newparts.com/Hella">Hella</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco23156464-VaporCanister_1.jpg" alt="EVAP canister" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco23156464-VaporCanister_1.jpg" data-size="23387" data-id="83" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>EVAP canister</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>7.&nbsp;</strong>EVAP System Leaks</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0455 (Evaporative Emission Control System Leak Detected)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Leaks in the EVAP system, such as cracks or faulty seals, can allow fuel vapors to escape into the atmosphere. So, this causes fuel vapor leaks and triggers related issues.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Check Engine Light Illuminated: A common indicator of an EVAP leak is the check engine light turning on. It is accompanied by fault codes like P0440, P0455, or P0456, indicating an issue with the system.</li>
+							<li>Fuel Odor: If there is a noticeable gasoline smell around the vehicle, it usually points to fuel vapors escaping from the EVAP system, signifying a leak.</li>
+							<li>Difficulty Starting After Refueling: After refueling, the engine may struggle to start due to excess fuel vapors in the system that disrupt normal engine operation.</li>
+							<li>Poor Fuel Economy: Leaks in the EVAP system can reduce fuel efficiency as escaping vapors prevent proper fuel circulation and combustion. So, it causes a drop in the overall economy.</li>
+							<li>Failed Emissions Test: An EVAP leak can lead to excessive fuel vapor emissions, causing the vehicle to fail emissions tests due to improper handling of exhaust gases.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/23156464">ACDelco-EVAP canister-23156464</a> : This ACDelco EVAP canister is designed to capture and store fuel vapors from the gas tank, preventing them from escaping into the atmosphere. It helps maintain fuel system integrity and reduce harmful emissions. Thus, it ensures your vehicle meets environmental standards.</li>
+							<li><a href="https://newparts.com/product/acdelco/2141680">ACDelco-purge valve-214-1680</a> : The ACDelco purge valve is responsible for regulating the flow of fuel vapors from the EVAP canister to the engine, where they are burned for fuel efficiency. A malfunctioning valve can lead to issues such as rough idling or increased emissions, making this valve an essential component for proper engine performance.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/Dorman">Dorman</a></li>
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-fuel-delivery-btn" class="tab-panel" id="panel-fuel-delivery" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco12670834-FuelInjectionThrottleBody.jpg" alt="Throttle Body " loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco12670834-FuelInjectionThrottleBody.jpg" data-size="22196" data-id="84" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Throttle Body&nbsp;</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Throttle Body Issues</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0121 (Throttle Position Sensor Range/Performance)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Over time, carbon can accumulate in the throttle body, making it sticky and unresponsive.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Rough or Unstable Idling: Improper air intake from a faulty throttle body can cause the engine to idle erratically. This leads to roughness or even stalling when the vehicle is stationary.</li>
+							<li>Poor Acceleration: A malfunctioning throttle body may restrict airflow. This results in sluggish acceleration or reduced power output when you press the gas pedal.</li>
+							<li>Stalling: The engine can stall immediately after starting or when attempting to accelerate from a stop. This is mainly due to inconsistent air-fuel mixture from a faulty throttle body.</li>
+							<li>Check Engine Light Illumination: Issues with the throttle body often trigger the check engine light. So, this alerts the driver to potential airflow or sensor problems.</li>
+							<li>Jerking or Surging Movements: Inconsistent airflow through the throttle body can cause the vehicle to jerk or surge unexpectedly while driving at steady speeds.</li>
+							<li>Increased Fuel Consumption: A faulty throttle body may disrupt the engine&rsquo;s efficiency, causing it to use more fuel than usual. So, it leads to more frequent refueling and poor fuel efficiency.</li>
+							<li>Delayed Throttle Response: You may experience a lag between pressing the accelerator pedal and the engine&rsquo;s response due to improper throttle body operation.</li>
+							<li>High or Fluctuating Idle Speed: A malfunctioning throttle body can cause the engine&rsquo;s idle speed to be higher than normal or fluctuate, affecting smooth operation at rest.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/12670834">ACDelco-Throttle body-12670834</a> : The ACDelco 12670834 throttle body is an OEM replacement part designed for precise airflow control into the engine. It ensures optimal engine performance by regulating the air intake, helping maintain smooth acceleration and idle stability.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12670834">Genuine Chevrolet Throttle Body 12670834</a> : This Genuine Chevrolet 12670834 throttle body is built specifically for Chevrolet vehicles, offering superior fit and performance. As an OEM part, it ensures long-lasting, reliable operation for your Chevrolet.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/GB835-11107-FuelInjector.jpg" alt="Fuel Injector" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/GB835-11107-FuelInjector.jpg" data-size="18635" data-id="85" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Fuel Injector</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>2.&nbsp;</strong>Fuel Injector Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0201 (Injector Circuit Malfunction)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Injectors can become clogged or start leaking over time. This causes misfires or poor fuel economy.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Engine Misfires: Misfires occur when the fuel injectors deliver irregular amounts of fuel to the engine. Because of this condition, the cylinders fail to fire properly, resulting in a rough-running engine.</li>
+							<li>Rough Idling: If fuel flow is inconsistent, the engine may struggle to maintain a steady idle, causing it to shake or vibrate unevenly, at low speeds, or when stopped.</li>
+							<li>Poor Acceleration: Without proper fuel delivery, the engine&rsquo;s power output decreases, making acceleration sluggish. Thus, the vehicle may struggle to pick up speed when the throttle is pressed.</li>
+							<li>Reduced Fuel Efficiency: Incomplete or inefficient fuel combustion caused by improper fuel injection can lead to increased fuel consumption. So, this results in poor gas mileage.</li>
+							<li>Check Engine Light Illuminates: A malfunctioning fuel injector triggers the check engine light, with fault codes such as P0200 (injector circuit) or P0300 (random misfires).</li>
+							<li>Difficulty Starting the Engine: Insufficient fuel reaching the engine due to faulty injectors can make starting difficult. So, the engine cranks and fails to start.</li>
+							<li>Excessive Exhaust Smoke: A malfunctioning injector can cause unburned fuel to exit through the exhaust. This produces black smoke, which indicates excessive fuel entering the combustion chamber.</li>
+							<li>Fuel Odor Around Vehicle: Leaking or faulty fuel injectors can lead to fuel fumes escaping. So, it creates a strong gasoline odor around the vehicle, which can be dangerous if left unchecked.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/fuel-delivery/fuel-injectors/hitachi-fij0042-fuel-injector">Hitachi Fuel Injector FIJ0042</a> : Hitachi fuel injectors are engineered to deliver accurate fuel flow for efficient engine performance. With advanced technology and a focus on reliability, these injectors help improve fuel efficiency and reduce emissions.</li>
+							<li><a href="https://newparts.com/fuel-delivery/fuel-injectors/gb-835-11107-fuel-injector">GB Fuel Injector 835-11107</a> : GB&rsquo;s remanufactured fuel injectors offer an affordable solution with OEM performance standards. These injectors are tested to ensure reliable fuel delivery, improving engine function and fuel economy.</li>
+							<li><a href="https://newparts.com/fuel-delivery/fuel-injectors/genuine-chevrolet-12608362-fuel-injector">Genuine Chevrolet Fuel Injector 12608362</a> : This OEM fuel injector from Chevrolet is designed specifically for Chevrolet vehicles. It&rsquo;s engineered for durability and fits seamlessly into compatible GM models.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/Hitachi">Hitachi</a></li>
+							<li><a href="https://newparts.com/GB">GB</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco12674703-EngineCrankshaftPositionSensor.jpg" alt="Crankshaft Position Sensor" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco12674703-EngineCrankshaftPositionSensor.jpg" data-size="16067" data-id="86" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Crankshaft Position Sensor</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>3.&nbsp;</strong>Crankshaft Position Sensor Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0335 (Crankshaft Position Sensor Circuit Malfunction)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>As your Chevy Equinox gets old, the heat and vibration can take their toll on the Crankshaft Position Sensor. So, this results in sensor failure.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Engine Stalling or Misfires: Inconsistent data from a faulty crankshaft position sensor can disrupt combustion timing. This causes the engine to stall unexpectedly or misfire during operation.</li>
+							<li>Difficulty Starting the Engine: The engine may crank but struggle to start or not start at all, as incorrect signals from the sensor affect ignition timing.</li>
+							<li>Check Engine Light Activation: A malfunctioning sensor may trigger the check engine light, with diagnostic codes often pointing to crankshaft position sensor issues.</li>
+							<li>Poor Engine Performance: Reduced power, hesitation during acceleration, and rough idling can result from a failing sensor that disrupts engine timing.</li>
+							<li>Increased Emissions: Faulty sensor readings can lead to incorrect fuel injection timing. This increases emissions and causes the vehicle to fail emissions tests.</li>
+							<li>Battery Drain: Electrical issues from a bad crankshaft sensor can cause excessive battery drain, leading to frequent recharging or battery replacement.</li>
+							<li>Unstable Engine RPM: Engine RPM may fluctuate unpredictably, making it hard to maintain a stable speed due to inaccurate timing data from the sensor.</li>
+							<li>Transmission Shifting Problems: In vehicles with automatic transmissions, incorrect data from the sensor can lead to erratic shifting or prevent the transmission from shifting smoothly.</li>
+							<li>Difficulty Achieving Optimal Fuel Efficiency: Inaccurate sensor readings can cause inefficient combustion. So, this leads to higher fuel consumption and reduced fuel economy.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/12674703">ACDelco-Crankshaft position sensor 12674703</a> : Designed specifically for GM(General Motor) vehicles, this sensor provides precise crankshaft positioning data to ensure smooth engine timing and optimal performance.</li>
+							<li><a href="https://newparts.com/product/ntk/EH0405">NTK Engine Crankshaft Position Sensor EH0405</a> : Known for quality and accuracy, this sensor from NTK offers reliable performance and durability.</li>
+							<li><a href="https://newparts.com/product/dorman-oe-solutions/907799">Dorman Engine Crankshaft Position Sensor 907-799</a> : Dorman&rsquo;s sensor offers an affordable, high-quality aftermarket option, delivering accurate crankshaft data to prevent stalling and improve engine performance.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/NTK">NTK</a></li>
+							<li><a href="https://newparts.com/Dorman">Dorman</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/StandardMotorProductsGDP103-DirectInjectionHighPressureFuelPump.jpg" alt="Fuel Pump" loading="lazy" class="fr-fil fr-dib" data-size="27401" data-width="600" data-message="File was successfully uploaded" data-height="400" data-url="/images/content/StandardMotorProductsGDP103-DirectInjectionHighPressureFuelPump.jpg" data-id="91">
+						<figcaption>Fuel Pump</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>4.&nbsp;</strong>Fuel Pump Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0087 (Fuel Rail Pressure Too Low)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Fuel pump failure can occur for several reasons, including worn internal components. Contaminants or debris in the fuel can clog the pump, filters, or fuel lines, obstructing proper fuel flow. Clogged fuel filters can also strain the pump, leading to premature failure. Additionally, insufficient electrical power supply to the pump, often caused by wiring issues or a failing relay, can prevent it from operating properly.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Engine Misfires or Hesitation: Inconsistent fuel delivery from a failing fuel pump can cause engine misfires or hesitation during acceleration. This occurs because the engine isn&#39;t receiving the proper amount of fuel, affecting combustion efficiency.</li>
+							<li>Difficulty Starting the Engine: A failing fuel pump may not supply enough fuel to the engine, leading to hard starts or difficulty in starting the vehicle. The engine struggles to get the required fuel pressure to ignite the combustion chamber properly.</li>
+							<li>Reduced Engine Power: When the fuel pump fails, the vehicle may enter limp mode to prevent engine damage, leading to a significant reduction in power. This happens as the engine limits the fuel supply to avoid further complications.</li>
+							<li>Check Engine Light Illuminated: A malfunctioning fuel pump can trigger fault codes related to fuel pressure, which will cause the check engine light to illuminate. These codes indicate a problem with the fuel system, linked to insufficient fuel delivery.</li>
+							<li>Excessive Exhaust Smoke: Improper fuel pressure can lead to incomplete combustion, causing black smoke from the exhaust. This happens when too much fuel enters the combustion chamber, unable to burn efficiently, resulting in excess emissions.</li>
+							<li>Unusual Noises: A failing fuel pump may produce whining or sputtering noises from the fuel tank area. These noises indicate that the pump is struggling to draw or push fuel.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/fuel-delivery/fuel-injectors/standard-motor-products-gdp103-direct-injection-high-pressure-fuel-pump">Standard Motor Products GDP103</a> Direct Injection High Pressure Fuel Pump: The Standard Fuel Pump GDP103 is designed to provide reliable and consistent fuel delivery, ensuring smooth engine performance. It meets OEM standards and is ideal for replacing a worn-out or malfunctioning fuel pump.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/standard-motor-parts">Standard Motor</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-electrical-system-btn" class="tab-panel" id="panel-electrical-system" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco13512759-Alternator.jpg" alt="Alternator" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco13512759-Alternator.jpg" data-size="16956" data-id="87" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Alternator</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Alternator Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0620 (Alternator Control Circuit Malfunction)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Worn bearings, faulty brushes, or a malfunctioning voltage regulator can lead to alternator failure. This results in dimming lights, battery drain, and electrical system malfunctions.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Dimming or Flickering Lights: When the alternator fails to maintain a consistent voltage, headlights and dashboard lights may dim or flicker. This happens because the electrical system is not receiving stable power.</li>
+							<li>Battery Warning Light: The battery warning light may illuminate, indicating a problem with the charging system. This typically suggests that the alternator is not charging the battery properly.</li>
+							<li>Dead Battery: If the alternator is not supplying enough power, the battery will not charge fully. This leads to frequent battery failures.</li>
+							<li>Electrical Malfunctions: Accessories like power windows, the radio, or the air conditioning system may behave erratically due to inadequate power being supplied by the failing alternator.</li>
+							<li>Strange Noises: A failing alternator may emit whining or grinding noises, often caused by worn-out bearings or damaged internal components.</li>
+							<li>Engine Stalling or Difficulty Starting: Insufficient electrical power from a malfunctioning alternator can cause the engine to stall or have difficulty starting</li>
+							<li>Burning Smell: Overheating alternator components can produce a burning smell, often resembling rubber or electrical burning, signaling imminent alternator failure.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/13512759">ACDelco-Alternator-13512759</a> : The ACDelco alternator is designed to provide reliable power to your vehicle&#39;s electrical system by converting mechanical energy into electrical energy. It ensures consistent charging of the battery and powers accessories like lights, radio, and air conditioning.</li>
+							<li><a href="https://newparts.com/product/acdelco/12634319">ACDelco-serpentine belt-12634319</a> : This ACDelco serpentine belt is designed for smooth and efficient operation, driving multiple engine components like the alternator, power steering pump, and air conditioning compressor. Its durable construction ensures reliable performance and reduces the risk of breakdowns.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12634319">Genuine Chevrolet Serpentine Belt 12634319</a> : This OEM serpentine belt is made specifically for Chevrolet vehicles, providing optimal performance for engine accessories. Its high-quality construction ensures a precise fit and durability, reducing wear and improving engine efficiency.</li>
+							<li><a href="https://newparts.com/product/gates/K050404">Gates Serpentine Belt K050404</a> : Gates serpentine belts are known for their durability and performance, designed to handle the power requirements of modern engines. The K050404 belt offers reliable operation, reducing the risk of slippage.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Gates">Gates</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco12609317-Starter.jpg" alt="Starter Motor" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco12609317-Starter.jpg" data-size="15075" data-id="88" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Starter Motor</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>2.&nbsp;</strong>Starter Motor Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0615 (Starter Relay Circuit Malfunction)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Your Chevy Equinox 2.4L develops common issues over time. One such issue is that the starter motor can wear out. So, this leads to starting problems when you try to start your vehicle.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Engine Won&#39;t Crank: When you turn the ignition key, the engine fails to respond. This can indicate a problem with the starter motor or the electrical components that power it, preventing the engine from turning over.</li>
+							<li>Clicking Noise: A rapid clicking noise heard when trying to start the engine means the starter solenoid is trying to engage but the motor is not turning the engine. This could be due to a weak battery or a faulty starter.</li>
+							<li>Intermittent Operation: If the engine starts only occasionally, it suggests that components inside the starter, such as brushes or the solenoid, may be worn out or malfunctioning, leading to unreliable performance.</li>
+							<li>Grinding Noise: A grinding sound while starting the engine may indicate that the starter gear is failing to properly engage with the flywheel, causing friction and damage to both components.</li>
+							<li>Starter Spins Without Engaging: If the starter motor spins without turning the engine over, it points to a problem with the starter drive gear.</li>
+							<li>Visible Smoke: Smoke emanating from the starter area can be a sign of overheating, caused by excessive electrical draw or a short circuit in the starter motor.</li>
+							<li>Oil Soak: If there is oil on the starter motor, it may be due to engine oil leaks. The oil can cause electrical failures in the starter, making it less reliable or preventing it from functioning altogether.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/12609317">ACDelco-Starter motor-12609317</a> : This ACDelco starter motor is designed to provide consistent engine starting performance. It is built to meet OEM standards and offers durability and efficiency.</li>
+							<li><a href="https://newparts.com/product/denso/2805396">Danso Starter Motor 280-5396</a> : The Danso starter motor is engineered for high performance and reliability. It provides efficient engine cranking and is a cost-effective option.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12609317">Genuine Chevrolet.Starter Motor 12609317</a> : This Genuine Chevrolet starter motor is an OEM part specifically designed for Chevrolet vehicles, ensuring perfect fitment and reliable starting power. It is built to meet the manufacturer&#39;s standards for long-lasting performance and durability.</li>
+							<li><a href="https://newparts.com/product/bbb-industries/6947">BBB Industries Starter Motor (Remanufactured)6947</a> : BBB Industries offers a remanufactured starter motor that is tested and restored to meet or exceed OEM specifications. This remanufactured unit is designed to provide reliable performance.</li>
+							<li><a href="https://newparts.com/product/bosch/SR8647X">Bosch Starter Motor (Remanufactured)SR8647X</a> : Bosch remanufactured starter motors, such as the SR8647X, are built to provide consistent and powerful cranking power. With a focus on durability and reliability, these starters are tested to meet rigorous standards.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Bosch">Bosch</a></li>
+							<li><a href="https://newparts.com/Danso">Danso</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-driveline-transmission-btn" class="tab-panel" id="panel-driveline-transmission" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ExedyKTY15-TransmissionClutchKit.jpg" alt="Clutch Kit" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ExedyKTY15-TransmissionClutchKit.jpg" data-size="49076" data-id="89" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Clutch Kit</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Slipping Clutch</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P0741, P0776, P0796 commonly appear when the transmission or torque converter clutch is slipping due to worn clutches, low line pressure, or faulty solenoids.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>Clutch slip in these Equinox models usually isn&rsquo;t a &ldquo;pedal-and-gear&rdquo; clutch like in manuals. Instead, it&rsquo;s the internal transmission clutch packs or torque converter clutch that begin to wear out. This happens over time from heat, dirty or low transmission fluid, sticking valves inside the valve body, or just normal material wear. Once the friction material thins out, the transmission struggles to hold gear properly - and that&rsquo;s where the slipping feeling comes from.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Engine revs rise but speed doesn&rsquo;t - you accelerate, but the SUV feels like it&rsquo;s &ldquo;thinking about it&rdquo;</li>
+							<li>Shuddering during acceleration - especially around 25-45 mph</li>
+							<li>Harsh or delayed shifts - mostly between 2nd and 3rd gear</li>
+							<li>Burning smell - overheated clutch material or old fluid</li>
+							<li>Poor fuel economy - slipping wastes power as heat</li>
+							<li>Transmission overheat message (in some cases)</li>
+							<li>Check Engine Light with codes listed above</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/transmission/clutch-kits/exedy-kty15-transmission-clutch-kit">Exedy KTY15</a> Transmission Clutch Kit restores proper gear engagement</li>
+							<li><a href="https://newparts.com/acdelco-19259215-automatic-transmission-torque-converter">ACDelco 19259215</a> - Automatic Transmission Torque Converter (if TCC slip or shudder is present)</li>
+							<li><a href="https://newparts.com/transmission/transmission-filters/acdelco-24247757-automatic-transmission-filter-o-ring">ACDelco 24247757</a> - Automatic Transmission Filter O-Ring</li>
+							<li><a href="https://newparts.com/oil-fluids-chemicals/transmission-fluids/motul-105784-automatic-transmission-fluid">Motul 105784</a> - Automatic Transmission Fluid - must be replaced after repairs</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/Exedy">Exedy</a></li>
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/Motul">Motul</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<div aria-hidden="true" aria-labelledby="tab-others-btn" class="tab-panel" id="panel-others" role="tabpanel">
+			<article class="issue">
+				<div class="issue-media">
+					<figure><img src="/images/content/ACDelco251-751-EngineWaterPump.jpg" alt="Water Pump" loading="lazy" class="fr-fil fr-dib" data-url="/images/content/ACDelco251-751-EngineWaterPump.jpg" data-size="31294" data-id="90" data-width="600" data-height="400" data-message="File was successfully uploaded">
+						<figcaption>Water Pump</figcaption>
+					</figure>
+				</div>
+				<div class="issue-content">
+
+					<h4><strong>1.&nbsp;</strong>Water Pump Failure</h4>
+					<div class="issue-block">
+
+						<h4><u>Fault Codes:</u></h4>
+
+						<p>P2181 (Cooling System Performance)</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Why it happens:</u></h4>
+
+						<p>A water pump failure often results from a worn-out pump, faulty bearings, or a failed seal, preventing coolant from circulating through the engine. When the pump leaks or fails, it can&rsquo;t maintain proper cooling, leading to overheating, which can cause severe engine damage if not addressed.</p>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Symptoms:</u></h4>
+
+						<ul class="symptom-list">
+							<li>Engine Overheating: When the water pump is faulty, coolant fails to circulate properly, causing the engine to overheat. Rising engine temperatures can lead to damage to vital engine components like the head gasket.</li>
+							<li>Coolant Leaks: A faulty water pump can cause coolant to leak, often seen as puddles under the vehicle, typically in the front-center area. These leaks reduce the amount of coolant available for proper engine cooling, exacerbating the risk of engine overheating.</li>
+							<li>Unusual Noises: Whining or grinding sounds coming from the front of the engine may indicate that the water pump&rsquo;s bearings are worn or damaged. These noises often signal impending failure and should be checked immediately to prevent further engine damage.</li>
+							<li>Steam from Radiator: If the water pump fails or there is a coolant leak, steam may emit from the radiator. This steam is caused by the coolant boiling due to insufficient circulation.</li>
+							<li>Loose or Wobbly Pulley: A loose or wobbly water pump pulley, caused by bearing failure, is a clear sign that the water pump is malfunctioning. If the pulley is not rotating smoothly, it may further disrupt the flow of coolant.</li>
+							<li>Low Coolant Levels: Frequent drops in coolant levels requiring constant top-ups can be a sign of a leaking or malfunctioning water pump. Low coolant levels compromise the efficiency of the cooling system.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Parts to Replace</u></h4>
+
+						<ul class="parts-list">
+							<li><a href="https://newparts.com/product/acdelco/251751">ACDelco-Water pump-251751</a> :The ACDelco 251751 water pump is an OEM-quality replacement part designed for efficient coolant circulation in the engine. Known for its durability, this water pump helps maintain optimal engine temperatures, preventing overheating and ensuring smooth operation.</li>
+							<li><a href="https://newparts.com/product/gmb/1307350AH">GMB Engine Water Pump 130-7350AH</a> : The GMB 130-7350AH engine water pump is engineered to provide reliable coolant circulation, helping maintain proper engine temperatures. It features a robust construction to withstand the pressures of the cooling system and prevent overheating.</li>
+							<li><a href="https://newparts.com/product/aisin/WPGM700">Aisin Engine Water Pump WPGM-700</a> : The Aisin WPGM-700 engine water pump is designed to provide efficient and reliable cooling performance. As a premium aftermarket part, it ensures proper coolant flow to maintain optimal engine temperature and prevent overheating.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12630084">Genuine Chevrolet Engine Water Pump 12630084</a> : The Genuine Chevrolet 12630084 engine water pump is specifically designed for Chevrolet vehicles to maintain efficient engine cooling. As an OEM replacement part, it ensures proper coolant circulation to prevent engine overheating, prolonging engine life.</li>
+							<li><a href="https://newparts.com/product/mahle/TX12282">Mahel-thermostat 12622410</a> : The Mahle 12622410 thermostat is a high-quality component designed to regulate the engine&#39;s operating temperature. It ensures the engine reaches the optimal temperature quickly and maintains it, preventing overheating.</li>
+							<li><a href="https://newparts.com/product/genuine-saab/32022446">SAAB Engine Coolant Thermostat 32022446</a> : The SAAB 32022446 engine coolant thermostat is engineered for precise temperature control in the engine cooling system. This high-quality thermostat is a reliable option for maintaining engine performance in SAAB vehicles.</li>
+							<li><a href="https://newparts.com/product/genuine-chevrolet/12622410">Genuine Chevrolet Engine Coolant Thermostat 12622410</a> : The Genuine Chevrolet 12622410 engine coolant thermostat is designed to regulate the engine&#39;s temperature, ensuring it operates at the optimal level. This OEM part provides superior performance, preventing engine overheating and improving fuel efficiency.</li>
+						</ul>
+					</div>
+					<div class="issue-block">
+
+						<h4><u>Brands</u></h4>
+
+						<ul class="brand-list">
+							<li><a href="https://newparts.com/MAHLE">MAHLE</a></li>
+							<li><a href="https://newparts.com/ACDelco">ACDelco</a></li>
+							<li><a href="https://newparts.com/GMB">GMB</a></li>
+							<li><a href="https://newparts.com/SAAB">SAAB</a></li>
+							<li><a href="https://newparts.com/Genuine-Chevrolet">Genuine Chevrolet</a></li>
+						</ul>
+					</div>
+				</div>
+			</article>
+		</div>
+		<!-- ======================== PASTE YOUR 23-ISSUES HTML ABOVE ======================== -->
+	</section>
+	<!-- ======================== WHY Newparts SECTION ======================== -->
+
+	<h4>Why NewParts.com?</h4>
+
+	<p>NewParts offers a wide selection of OEM and well reviewed aftermarket parts selected for compatibility across a broad range of vehicle makes and models. Parts are listed with clear fitment details and recognized brand options to help identify components suitable for routine maintenance and common repairs.</p>
+
+	<h4>Fast and Efficient Order Fulfillment</h4>
+
+	<p>When a vehicle is out of service, timing matters. NewParts focuses on efficient order processing and organized fulfillment to help customers receive parts without unnecessary delays. This approach supports smoother repair planning and reduced wait time.</p>
+
+	<h4>Competitive Pricing and Practical Selection</h4>
+
+	<p>The catalog includes components such as Timing chains, Ignition coil, Brake pad, Water pump, PCV valves, wheel bearings, control arms, fuel pumps, and other commonly replaced parts. Customers can choose between OEM replacements and established aftermarket options, allowing flexibility based on preference and budget.</p>
+
+	<h4>Trusted Excellence</h4>
+
+	<p>NewParts works with manufacturers known for producing reliable replacement components. These parts are designed to match original specifications for fit and function, making them suitable for addressing typical wear related issues across engine, electrical, and suspension systems.</p>
+
+	<h4>Conclusion</h4>
+
+	<p>Whether performing routine maintenance or addressing a specific concern, these listings help narrow down relevant parts for a repair. For vehicle specific confirmation and installation steps, consult a qualified technician before completing service.</p>
+	<!-- ======================== FAQ SECTION ======================== -->
+	<section aria-labelledby="faq-heading" class="faq" id="faq">
+
+		<h2 id="faq-heading">Frequently Asked Questions</h2>
+		<div class="faq-list" role="list">
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">What common issues do GL550 and GLS550 owners experience?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">Most owners report air suspension sagging, oil leaks from valve covers or turbo lines, and premature wear in control arms. These issues become more noticeable as mileage increases.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">Why does my GL550 or GLS550 sit low or lean on one side?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">This is usually caused by failing air suspension components like air struts, air springs, or the compressor. The SUV may drop overnight or show a suspension warning.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">Is maintenance on the GL550/GLS550 expensive?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">Maintenance costs can be higher due to the V8 twin-turbo engine and advanced suspension system. Regular service and using reliable OEM or premium aftermarket parts help keep costs manageable.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">Why does my GL550/GLS550 show a loss of power during acceleration?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">Loss of power often points to worn spark plugs, boost leaks, dirty sensors, or early turbo wear. A simple inspection of coils, hoses, and sensors usually identifies the cause.</div>
+			</details>
+			<details class="faq-item" role="listitem">
+				<summary class="faq-q">What causes a burning oil smell in the GL550 or GLS550?<span aria-hidden="true" class="chev">⌄</span></summary>
+				<div class="faq-a">These models commonly develop valve cover gasket leaks or oil leaks around turbo oil lines. Heat from the engine makes the smell stronger, especially after longer drives.</div>
+			</details>
+		</div>
+	</section>
+	<!-- ======================== CUSTOMER REVIEWS ======================== -->
+	<section class="reviews" id="customer-reviews">
+
+		<h2>What Customers Say on Trustpilot</h2>
+		<div class="review-card">
+			<div class="stars">★★★★★</div>
+
+			<p><strong>I have experience with Newparts&hellip;</strong>
+				<br>&quot;I have experience with Newparts longtime and they good parts of Mercedes and all fits my car. They have excellent quality parts.&rdquo; - <a href="https://www.trustpilot.com/reviews/68568ca57457a6a2117eff7b" rel="noopener noreferrer" target="_blank">Mohamed Abbas</a></p>
+		</div>
+		<div class="review-card">
+			<div class="stars">★★★★★</div>
+
+			<p><strong>Newparts My No 1 go to.</strong>
+				<br>&quot;Newparts has good prices and hassle free service. They have lots of parts for my North American MB Sprinter but you have to know what you need as they often default to the European Sprinter models and not all the parts are the same. Having said that. I got high quality parts at a great price and they fit perfectly. Lots of quality brand names to choose from and good selection. This is now the first place I look for parts.&quot; - <a href="https://www.trustpilot.com/reviews/6112c6d3f9f48708742df4be" rel="noopener noreferrer" target="_blank">Daniel R</a></p>
+		</div>
+	</section>
+	<!-- ======================== CLOSING CTA ======================== -->
+	<section class="closing-cta">
+
+		<h3>Shop now at Newparts.com - your trusted partner for quality automotive parts at unbeatable prices!</h3>
+	</section>
+	<script>
+		document.addEventListener("DOMContentLoaded", function()
+		{
+			document.querySelectorAll("img").forEach(function(img)
+			{
+				if (!img.hasAttribute("title") && img.hasAttribute("alt"))
+				{
+					img.setAttribute("title", img.getAttribute("alt"));
+				}
+			});
+		});
+
+	</script>
+	<script src="/js/carousel.js" defer=""></script>
+	<script src="/js/lightbox.js" defer=""></script>
+	<!-- WebPage Schema -->
+	<script type="application/ld+json">
+		{ "@context": "https://schema.org", "@type": "WebPage", "inLanguage": "en-US", "name": "Chevrolet Equinox 2.4L Ecotec Platform Guide (2010–2017)", "url": "https://newparts.com/platform-guides/chevrolet/equinox/2-4l-ecotec-2010-2017/", "description": "Platform guide for Chevrolet Equinox 2.4L Ecotec (2010–2017) with specs, compatibility, common issues and replacement parts guidance.", "isPartOf": { "@type": "WebSite", "name": "Newparts", "url": "https://newparts.com/" }, "primaryImageOfPage": { "@type": "ImageObject", "url": "https://newparts.com/path-to-main-image.jpg" } }
+	</script>
+	<!-- Breadcrumb Schema -->
+	<script type="application/ld+json">
+		{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://newparts.com/" }, { "@type": "ListItem", "position": 2, "name": "Chevrolet Equinox Guides", "item": "https://newparts.com/platform-guides/chevrolet/equinox/" }, { "@type": "ListItem", "position": 3, "name": "Chevrolet Equinox 2.4L Ecotec (2010–2017)", "item": "https://newparts.com/platform-guides/chevrolet/equinox/2-4l-ecotec-2010-2017/" } ] }
+	</script>
+	<script>
+		(() =>
+		{
+			'use strict';
+
+			// ====== Helpers ======
+			const $ = (sel, ctx = document) => ctx.querySelector(sel);
+			const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+			const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
+
+			// =========================================================
+			// 1) GALLERY: thumbs click + arrows + swipe + keyboard
+			// =========================================================
+			const mainImg = $('#mainImage');
+			const galMain = $('#galleryMain');
+			const thumbs = $$('#thumbs .thumb');
+			const prevBtn = $('#galPrev');
+			const nextBtn = $('#galNext');
+
+			if (mainImg && galMain && prevBtn && nextBtn)
+			{
+				// Build sequence: main image first, then each thumb's data-src in DOM order
+				const urls = [];
+				const initial = mainImg.getAttribute('src');
+				if (initial) urls.push(initial);
+
+				thumbs.forEach(btn =>
+				{
+					const src = btn.getAttribute('data-src') || $('img', btn) ? .getAttribute('src');
+					if (src) urls.push(src);
+				});
+
+				// Deduplicate while keeping order
+				const seen = new Set();
+				const images = urls.filter(u => (u && !seen.has(u)) ? (seen.add(u), true) : false);
+
+				let idx = 0; // current index in images
+
+				// Mark active thumb
+				function markActive()
+				{
+					thumbs.forEach((btn) => btn.removeAttribute('aria-current'));
+					const currentSrc = images[idx];
+					const match = thumbs.find(btn => (btn.getAttribute('data-src') || $('img', btn) ? .getAttribute('src')) === currentSrc);
+					if (match) match.setAttribute('aria-current', 'true');
+				}
+
+				function show(i)
+				{
+					if (!images.length) return;
+					idx = (i + images.length) % images.length;
+					if (mainImg.getAttribute('src') !== images[idx])
+					{
+						mainImg.setAttribute('src', images[idx]);
+					}
+					markActive();
+				}
+
+				// Init in case initial isn't index 0 for some reason
+				const startAt = images.indexOf(initial);
+				show(startAt >= 0 ? startAt : 0);
+
+				// Thumbs click
+				thumbs.forEach((btn) =>
+				{
+					btn.addEventListener('click', (e) =>
+					{
+						e.preventDefault();
+						const src = btn.getAttribute('data-src') || $('img', btn) ? .getAttribute('src');
+						const i = images.indexOf(src);
+						if (i >= 0) show(i);
+					});
+				});
+
+				// Arrows
+				prevBtn.addEventListener('click', () => show(idx - 1));
+				nextBtn.addEventListener('click', () => show(idx + 1));
+
+				// Keyboard (Left/Right) when gallery has focus
+				galMain.setAttribute('tabindex', '0');
+				galMain.addEventListener('keydown', (e) =>
+				{
+					if (e.key === 'ArrowLeft')
+					{
+						e.preventDefault();
+						show(idx - 1);
+					}
+					if (e.key === 'ArrowRight')
+					{
+						e.preventDefault();
+						show(idx + 1);
+					}
+				});
+
+				// Touch swipe
+				let touchX = null,
+					touchY = null,
+					moved = false;
+				const SWIPE_X_THRESHOLD = 30;
+				const SWIPE_Y_CANCEL = 20;
+
+				galMain.addEventListener('touchstart', (e) =>
+				{
+					const t = e.touches[0];
+					touchX = t.clientX;
+					touchY = t.clientY;
+					moved = false;
+				},
+				{
+					passive: true
+				});
+
+				galMain.addEventListener('touchmove', (e) =>
+				{
+					if (touchX == null || touchY == null) return;
+					const t = e.touches[0];
+					const dx = t.clientX - touchX;
+					const dy = t.clientY - touchY;
+					if (Math.abs(dy) > SWIPE_Y_CANCEL) return; // let vertical scroll happen
+					if (Math.abs(dx) > SWIPE_X_THRESHOLD)
+					{
+						moved = true;
+						if (dx > 0) show(idx - 1);
+						else show(idx + 1);
+						// Reset to avoid multiple triggers in same gesture
+						touchX = touchY = null;
+					}
+				},
+				{
+					passive: true
+				});
+
+				galMain.addEventListener('touchend', () =>
+				{
+					touchX = touchY = null;
+					moved = false;
+				});
+			}
+
+			// =========================================================
+			// 2) SPECIFICATIONS: accordion on mobile only
+			// =========================================================
+			const specBlocks = $$('.spec-block[data-acc]');
+
+			function applySpecMode()
+			{
+				if (!specBlocks.length) return;
+				if (isMobile())
+				{
+					// Mobile: allow toggle, default collapsed (unless already opened)
+					specBlocks.forEach(block =>
+					{
+						const head = $('.spec-head', block);
+						const body = $('.spec-body', block);
+						const currentOpen = block.classList.contains('acc-open');
+						head ? .setAttribute('role', 'button');
+						head ? .setAttribute('tabindex', '0');
+						head ? .setAttribute('aria-expanded', currentOpen ? 'true' : 'false');
+						if (!currentOpen) body ? .setAttribute('hidden', 'hidden');
+					});
+				}
+				else
+				{
+					// Desktop: always open
+					specBlocks.forEach(block =>
+					{
+						const head = $('.spec-head', block);
+						const body = $('.spec-body', block);
+						block.classList.remove('acc-open');
+						head ? .removeAttribute('role');
+						head ? .removeAttribute('tabindex');
+						head ? .setAttribute('aria-expanded', 'true');
+						body ? .removeAttribute('hidden');
+						body ? .style.removeProperty('display'); // ensure visible even if inline styles existed
+					});
+				}
+			}
+
+			function toggleSpec(block)
+			{
+				if (!isMobile()) return; // only on mobile
+				const head = $('.spec-head', block);
+				const body = $('.spec-body', block);
+				const open = block.classList.toggle('acc-open');
+				head ? .setAttribute('aria-expanded', open ? 'true' : 'false');
+				if (open) body ? .removeAttribute('hidden');
+				else body ? .setAttribute('hidden', 'hidden');
+			}
+
+			// Bind once
+			specBlocks.forEach(block =>
+			{
+				const head = $('.spec-head', block);
+				head ? .addEventListener('click', () => toggleSpec(block));
+				head ? .addEventListener('keydown', (e) =>
+				{
+					if (e.key === 'Enter' || e.key === ' ')
+					{
+						e.preventDefault();
+						toggleSpec(block);
+					}
+				});
+			});
+
+			applySpecMode();
+			window.addEventListener('resize', () => applySpecMode());
+
+			// =========================================================
+			// 3) CATEGORY TABS: show selected panel + sync mobile dropdown
+			// =========================================================
+			const tabWrap = $('#tabbarWrap');
+			const tabbar = $('.tabbar', tabWrap || undefined);
+			const tabBtns = tabbar ? $$('[role="tab"]', tabbar) : [];
+			const panels = $$('.tab-panel');
+			const catSelect = $('#categorySelect');
+
+			function showPanelById(panelId)
+			{
+				// Hide all
+				panels.forEach(p =>
+				{
+					p.setAttribute('aria-hidden', p.id === panelId ? 'false' : 'true');
+					if (p.id === panelId) p.style.removeProperty('display'); // ensure visible
+				});
+
+				// Update tab buttons
+				tabBtns.forEach(btn =>
+				{
+					const selected = btn.getAttribute('aria-controls') === panelId;
+					btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+					btn.tabIndex = selected ? 0 : -1;
+				});
+
+				// Sync dropdown (mobile)
+				if (catSelect)
+				{
+					const opt = Array.from(catSelect.options).find(o => o.value === panelId);
+					if (opt) catSelect.value = panelId;
+				}
+			}
+
+			// Build/clean the mobile dropdown options from tabs (avoids stale values)
+			function rebuildDropdown()
+			{
+				if (!catSelect || !tabBtns.length) return;
+				catSelect.innerHTML = '';
+				tabBtns.forEach((btn) =>
+				{
+					const id = btn.getAttribute('aria-controls');
+					const text = btn.textContent.trim() || id;
+					if (!id) return;
+					const opt = document.createElement('option');
+					opt.value = id;
+					opt.textContent = text;
+					catSelect.appendChild(opt);
+				});
+			}
+
+			// Click on tabs
+			tabBtns.forEach(btn =>
+			{
+				btn.addEventListener('click', (e) =>
+				{
+					e.preventDefault();
+					const panelId = btn.getAttribute('aria-controls');
+					if (!panelId || !$('#' + panelId)) return; // mismatch safeguard
+					showPanelById(panelId);
+				});
+			});
+
+			// Dropdown change (mobile)
+			catSelect ? .addEventListener('change', () =>
+			{
+				const val = catSelect.value;
+				if (val && $('#' + val)) showPanelById(val);
+			});
+
+			// Keyboard roving focus for tabs
+			if (tabBtns.length)
+			{
+				tabbar ? .setAttribute('role', 'tablist');
+				tabBtns.forEach((btn, i) =>
+				{
+					btn.tabIndex = btn.getAttribute('aria-selected') === 'true' ? 0 : -1;
+					btn.addEventListener('keydown', (e) =>
+					{
+						if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+						e.preventDefault();
+						let nextIndex = i;
+						if (e.key === 'ArrowRight') nextIndex = (i + 1) % tabBtns.length;
+						if (e.key === 'ArrowLeft') nextIndex = (i - 1 + tabBtns.length) % tabBtns.length;
+						if (e.key === 'Home') nextIndex = 0;
+						if (e.key === 'End') nextIndex = tabBtns.length - 1;
+						tabBtns[nextIndex].focus();
+						tabBtns[nextIndex].click();
+					});
+				});
+			}
+
+			// Initial setup
+			rebuildDropdown();
+
+			// If no tab marked selected=true, select first
+			if (!tabBtns.some(b => b.getAttribute('aria-selected') === 'true') && tabBtns.length)
+			{
+				tabBtns[0].setAttribute('aria-selected', 'true');
+			}
+			// Show correct initial panel (the one tied to aria-selected=true), else first panel
+			const selectedBtn = tabBtns.find(b => b.getAttribute('aria-selected') === 'true') || tabBtns[0];
+			if (selectedBtn) showPanelById(selectedBtn.getAttribute('aria-controls'));
+		})();
+
+	</script>
+	<!-- WebPage Schema -->
+	<script type="application/ld+json">
+		{ "@context": "https://schema.org", "@type": "WebPage", "inLanguage": "en-US", "name": "Chevrolet Equinox 2.4L Ecotec Platform Guide (2010–2017)", "url": "https://newparts.com/platform-guides/chevrolet/equinox/2-4l-ecotec-2010-2017/", "description": "Platform guide for Chevrolet Equinox 2.4L Ecotec (2010–2017) with specs, compatibility, common issues and replacement parts guidance.", "isPartOf": { "@type": "WebSite", "name": "Newparts", "url": "https://newparts.com/" }, "primaryImageOfPage": { "@type": "ImageObject", "url": "https://newparts.com/path-to-main-image.jpg" } }
+	</script>
+	<!-- Breadcrumb Schema -->
+	<script type="application/ld+json">
+		{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://newparts.com/" }, { "@type": "ListItem", "position": 2, "name": "Chevrolet Equinox Guides", "item": "https://newparts.com/platform-guides/chevrolet/equinox/" }, { "@type": "ListItem", "position": 3, "name": "Chevrolet Equinox 2.4L Ecotec (2010–2017)", "item": "https://newparts.com/platform-guides/chevrolet/equinox/2-4l-ecotec-2010-2017/" } ] }
+	</script>
+	<script>
+		(() =>
+		{
+			'use strict';
+
+			// ====== Helpers ======
+			const $ = (sel, ctx = document) => ctx.querySelector(sel);
+			const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+			const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
+
+			// =========================================================
+			// 1) GALLERY: thumbs click + arrows + swipe + keyboard
+			// =========================================================
+			const mainImg = $('#mainImage');
+			const galMain = $('#galleryMain');
+			const thumbs = $$('#thumbs .thumb');
+			const prevBtn = $('#galPrev');
+			const nextBtn = $('#galNext');
+
+			if (mainImg && galMain && prevBtn && nextBtn)
+			{
+				// Build sequence: main image first, then each thumb's data-src in DOM order
+				const urls = [];
+				const initial = mainImg.getAttribute('src');
+				if (initial) urls.push(initial);
+
+				thumbs.forEach(btn =>
+				{
+					const src = btn.getAttribute('data-src') || $('img', btn) ? .getAttribute('src');
+					if (src) urls.push(src);
+				});
+
+				// Deduplicate while keeping order
+				const seen = new Set();
+				const images = urls.filter(u => (u && !seen.has(u)) ? (seen.add(u), true) : false);
+
+				let idx = 0; // current index in images
+
+				// Mark active thumb
+				function markActive()
+				{
+					thumbs.forEach((btn) => btn.removeAttribute('aria-current'));
+					const currentSrc = images[idx];
+					const match = thumbs.find(btn => (btn.getAttribute('data-src') || $('img', btn) ? .getAttribute('src')) === currentSrc);
+					if (match) match.setAttribute('aria-current', 'true');
+				}
+
+				function show(i)
+				{
+					if (!images.length) return;
+					idx = (i + images.length) % images.length;
+					if (mainImg.getAttribute('src') !== images[idx])
+					{
+						mainImg.setAttribute('src', images[idx]);
+					}
+					markActive();
+				}
+
+				// Init in case initial isn't index 0 for some reason
+				const startAt = images.indexOf(initial);
+				show(startAt >= 0 ? startAt : 0);
+
+				// Thumbs click
+				thumbs.forEach((btn) =>
+				{
+					btn.addEventListener('click', (e) =>
+					{
+						e.preventDefault();
+						const src = btn.getAttribute('data-src') || $('img', btn) ? .getAttribute('src');
+						const i = images.indexOf(src);
+						if (i >= 0) show(i);
+					});
+				});
+
+				// Arrows
+				prevBtn.addEventListener('click', () => show(idx - 1));
+				nextBtn.addEventListener('click', () => show(idx + 1));
+
+				// Keyboard (Left/Right) when gallery has focus
+				galMain.setAttribute('tabindex', '0');
+				galMain.addEventListener('keydown', (e) =>
+				{
+					if (e.key === 'ArrowLeft')
+					{
+						e.preventDefault();
+						show(idx - 1);
+					}
+					if (e.key === 'ArrowRight')
+					{
+						e.preventDefault();
+						show(idx + 1);
+					}
+				});
+
+				// Touch swipe
+				let touchX = null,
+					touchY = null,
+					moved = false;
+				const SWIPE_X_THRESHOLD = 30;
+				const SWIPE_Y_CANCEL = 20;
+
+				galMain.addEventListener('touchstart', (e) =>
+				{
+					const t = e.touches[0];
+					touchX = t.clientX;
+					touchY = t.clientY;
+					moved = false;
+				},
+				{
+					passive: true
+				});
+
+				galMain.addEventListener('touchmove', (e) =>
+				{
+					if (touchX == null || touchY == null) return;
+					const t = e.touches[0];
+					const dx = t.clientX - touchX;
+					const dy = t.clientY - touchY;
+					if (Math.abs(dy) > SWIPE_Y_CANCEL) return; // let vertical scroll happen
+					if (Math.abs(dx) > SWIPE_X_THRESHOLD)
+					{
+						moved = true;
+						if (dx > 0) show(idx - 1);
+						else show(idx + 1);
+						// Reset to avoid multiple triggers in same gesture
+						touchX = touchY = null;
+					}
+				},
+				{
+					passive: true
+				});
+
+				galMain.addEventListener('touchend', () =>
+				{
+					touchX = touchY = null;
+					moved = false;
+				});
+			}
+
+			// =========================================================
+			// 2) SPECIFICATIONS: accordion on mobile only
+			// =========================================================
+			const specBlocks = $$('.spec-block[data-acc]');
+
+			function applySpecMode()
+			{
+				if (!specBlocks.length) return;
+				if (isMobile())
+				{
+					// Mobile: allow toggle, default collapsed (unless already opened)
+					specBlocks.forEach(block =>
+					{
+						const head = $('.spec-head', block);
+						const body = $('.spec-body', block);
+						const currentOpen = block.classList.contains('acc-open');
+						head ? .setAttribute('role', 'button');
+						head ? .setAttribute('tabindex', '0');
+						head ? .setAttribute('aria-expanded', currentOpen ? 'true' : 'false');
+						if (!currentOpen) body ? .setAttribute('hidden', 'hidden');
+					});
+				}
+				else
+				{
+					// Desktop: always open
+					specBlocks.forEach(block =>
+					{
+						const head = $('.spec-head', block);
+						const body = $('.spec-body', block);
+						block.classList.remove('acc-open');
+						head ? .removeAttribute('role');
+						head ? .removeAttribute('tabindex');
+						head ? .setAttribute('aria-expanded', 'true');
+						body ? .removeAttribute('hidden');
+						body ? .style.removeProperty('display'); // ensure visible even if inline styles existed
+					});
+				}
+			}
+
+			function toggleSpec(block)
+			{
+				if (!isMobile()) return; // only on mobile
+				const head = $('.spec-head', block);
+				const body = $('.spec-body', block);
+				const open = block.classList.toggle('acc-open');
+				head ? .setAttribute('aria-expanded', open ? 'true' : 'false');
+				if (open) body ? .removeAttribute('hidden');
+				else body ? .setAttribute('hidden', 'hidden');
+			}
+
+			// Bind once
+			specBlocks.forEach(block =>
+			{
+				const head = $('.spec-head', block);
+				head ? .addEventListener('click', () => toggleSpec(block));
+				head ? .addEventListener('keydown', (e) =>
+				{
+					if (e.key === 'Enter' || e.key === ' ')
+					{
+						e.preventDefault();
+						toggleSpec(block);
+					}
+				});
+			});
+
+			applySpecMode();
+			window.addEventListener('resize', () => applySpecMode());
+
+			// =========================================================
+			// 3) CATEGORY TABS: show selected panel + sync mobile dropdown
+			// =========================================================
+			const tabWrap = $('#tabbarWrap');
+			const tabbar = $('.tabbar', tabWrap || undefined);
+			const tabBtns = tabbar ? $$('[role="tab"]', tabbar) : [];
+			const panels = $$('.tab-panel');
+			const catSelect = $('#categorySelect');
+
+			function showPanelById(panelId)
+			{
+				// Hide all
+				panels.forEach(p =>
+				{
+					p.setAttribute('aria-hidden', p.id === panelId ? 'false' : 'true');
+					if (p.id === panelId) p.style.removeProperty('display'); // ensure visible
+				});
+
+				// Update tab buttons
+				tabBtns.forEach(btn =>
+				{
+					const selected = btn.getAttribute('aria-controls') === panelId;
+					btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+					btn.tabIndex = selected ? 0 : -1;
+				});
+
+				// Sync dropdown (mobile)
+				if (catSelect)
+				{
+					const opt = Array.from(catSelect.options).find(o => o.value === panelId);
+					if (opt) catSelect.value = panelId;
+				}
+			}
+
+			// Build/clean the mobile dropdown options from tabs (avoids stale values)
+			function rebuildDropdown()
+			{
+				if (!catSelect || !tabBtns.length) return;
+				catSelect.innerHTML = '';
+				tabBtns.forEach((btn) =>
+				{
+					const id = btn.getAttribute('aria-controls');
+					const text = btn.textContent.trim() || id;
+					if (!id) return;
+					const opt = document.createElement('option');
+					opt.value = id;
+					opt.textContent = text;
+					catSelect.appendChild(opt);
+				});
+			}
+
+			// Click on tabs
+			tabBtns.forEach(btn =>
+			{
+				btn.addEventListener('click', (e) =>
+				{
+					e.preventDefault();
+					const panelId = btn.getAttribute('aria-controls');
+					if (!panelId || !$('#' + panelId)) return; // mismatch safeguard
+					showPanelById(panelId);
+				});
+			});
+
+			// Dropdown change (mobile)
+			catSelect ? .addEventListener('change', () =>
+			{
+				const val = catSelect.value;
+				if (val && $('#' + val)) showPanelById(val);
+			});
+
+			// Keyboard roving focus for tabs
+			if (tabBtns.length)
+			{
+				tabbar ? .setAttribute('role', 'tablist');
+				tabBtns.forEach((btn, i) =>
+				{
+					btn.tabIndex = btn.getAttribute('aria-selected') === 'true' ? 0 : -1;
+					btn.addEventListener('keydown', (e) =>
+					{
+						if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+						e.preventDefault();
+						let nextIndex = i;
+						if (e.key === 'ArrowRight') nextIndex = (i + 1) % tabBtns.length;
+						if (e.key === 'ArrowLeft') nextIndex = (i - 1 + tabBtns.length) % tabBtns.length;
+						if (e.key === 'Home') nextIndex = 0;
+						if (e.key === 'End') nextIndex = tabBtns.length - 1;
+						tabBtns[nextIndex].focus();
+						tabBtns[nextIndex].click();
+					});
+				});
+			}
+
+			// Initial setup
+			rebuildDropdown();
+
+			// If no tab marked selected=true, select first
+			if (!tabBtns.some(b => b.getAttribute('aria-selected') === 'true') && tabBtns.length)
+			{
+				tabBtns[0].setAttribute('aria-selected', 'true');
+			}
+			// Show correct initial panel (the one tied to aria-selected=true), else first panel
+			const selectedBtn = tabBtns.find(b => b.getAttribute('aria-selected') === 'true') || tabBtns[0];
+			if (selectedBtn) showPanelById(selectedBtn.getAttribute('aria-controls'));
+		})();
+
+	</script>
+</main>
