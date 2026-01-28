@@ -82,7 +82,7 @@ def find_car_images(images_folder=None):
                 # Check if pattern appears at the end or anywhere in the filename
                 if (filename_normalized.endswith(pattern) or 
                     pattern in filename_normalized):
-                    car_images[view_type] = f'https://admin.Newparts.com/var/theme/images/{img_file}'
+                    car_images[view_type] = f'https://admin.newparts.com/var/theme/images/{img_file}'
                     break
     
     return car_images
@@ -371,7 +371,7 @@ def parse_word_document(docx_path):
 
             # Simple search query generation for fallback link
             search_query = re.sub(r'[^a-zA-Z0-9\s]', '', part_name).strip()
-            link = f'https://Newparts.com/parts/search?q={search_query}'
+            link = f'https://newparts.com/parts/search?q={search_query}'
         
         return {
             'name': part_name,
@@ -563,11 +563,11 @@ def parse_word_document(docx_path):
                             if brands_match:
                                 fields_parsed['brands'] = True
                                 brands_text = brands_match.group(2).strip()
-                                if 'Newparts Advantage:' in brands_text:
-                                    brands_text = brands_text.split('Newparts Advantage:')[0].strip()
+                                if 'newparts Advantage:' in brands_text:
+                                    brands_text = brands_text.split('newparts Advantage:')[0].strip()
                                 if brands_text:
                                     brand_list = [b.strip() for b in brands_text.replace(' and ', ',').split(',') if b.strip()]
-                                    issue['brands'] = [{'name': b, 'link': f"https://Newparts.com/{b.replace(' ', '-')}"} 
+                                    issue['brands'] = [{'name': b, 'link': f"https://newparts.com/{b.replace(' ', '-')}"} 
                                                       for b in brand_list]
                         
                         # Capture subsequent part lines
@@ -598,11 +598,11 @@ def parse_word_document(docx_path):
                         fields_parsed['parts'] = True
                         
                         brands_text = brands_match.group(2).strip()
-                        if 'Newparts Advantage:' in brands_text:
-                            brands_text = brands_text.split('Newparts Advantage:')[0].strip()
+                        if 'newparts Advantage:' in brands_text:
+                            brands_text = brands_text.split('newparts Advantage:')[0].strip()
                         if brands_text:
                             brand_list = [b.strip() for b in brands_text.replace(' and ', ',').split(',') if b.strip()]
-                            issue['brands'] = [{'name': b, 'link': f"https://Newparts.com/{b.replace(' ', '-')}"} 
+                            issue['brands'] = [{'name': b, 'link': f"https://newparts.com/{b.replace(' ', '-')}"} 
                                               for b in brand_list]
 
                 # Implicit Symptoms
